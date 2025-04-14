@@ -7,22 +7,23 @@
     --background-color: #F9F7F8;
     --font-color-main: #222;
     --h5: 24px;
+    --orange-main: #FFC470;
 }
 
-body{
+body {
     background-color: var(--background-color);
     color: var(--font-color-main);
     font-family: "Roboto", sans-serif;
     font-weight: 300;
 }
 
-.wrapper{
+.wrapper {
     width: auto;
 }
 
-header{
+header {
     padding: 12px 20px;
-    width: 100%;
+    width: auto;
     top: 0;
     display: flex;
     justify-content: space-between;
@@ -30,19 +31,19 @@ header{
     position: sticky;
 }
 
-header .logo{
+header .logo {
     font-family: "Kalnia", serif;
     font-weight: 600;
     font-size: 48px;
     cursor: pointer;
 }
 
-header ul.nav{
+header ul.nav {
     float: right;
     list-style: none;
 }
 
-header ul.nav li{
+header ul.nav li {
     display: inline;
     margin-left: 25px;
     cursor: pointer;
@@ -50,11 +51,11 @@ header ul.nav li{
     transition: opacity 500ms ease;
 }
 
-header ul.nav li:hover{
+header ul.nav li:hover {
     opacity: 0.5;
 }
 
-header .presentation{
+header .presentation {
     background: url('./img/presentation.jpg') no-repeat;
     width: 100%;
     height: 500px;
@@ -62,7 +63,7 @@ header .presentation{
     background-position: center center;
 }
 
-footer{
+footer {
     text-align: center;
     margin-top: 10px;
 }
