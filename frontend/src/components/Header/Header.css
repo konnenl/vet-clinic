@@ -1,0 +1,43 @@
+
+header{
+    padding: 12px 20px;
+    width: auto;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+}
+
+header .logo{
+    font-family: "Kalnia", serif;
+    font-weight: 600;
+    font-size: 48px;
+    cursor: pointer;
+}
+
+header ul.nav{
+    float: right;
+    list-style: none;
+}
+
+header ul.nav li{
+    display: inline;
+    margin-left: 25px;
+    cursor: pointer;
+    font-size: var(--h5);
+    transition: opacity 500ms ease;
+}
+
+header ul.nav li:hover{
+    opacity: 0.5;
+}
+
+header .presentation{
+    background: url('./img/presentation.jpg') no-repeat;
+    width: 100%;
+    height: 500px;
+    background-size: cover;
+    background-position: center center;
+}
+
