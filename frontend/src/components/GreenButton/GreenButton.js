@@ -1,10 +1,10 @@
 import React from 'react'
 import './GreenButton.css'
 
-export default function GreenButton({buttonText}) {
+export default function GreenButton(props) {
   return (
     <button className='green-button '>
-        {buttonText}
+        {props.text}
     </button>
   )
 }

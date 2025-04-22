@@ -1,5 +1,5 @@
-
 header{
+    background-color: var(--background-color);
     padding: 12px 20px;
     width: auto;
     top: 0;
@@ -7,6 +7,9 @@ header{
     justify-content: space-between;
     align-items: center;
     position: sticky;
+    border-radius:0px 0px 12px 12px;
+    box-shadow: 0px 1px 10px var(--shadow);
+    z-index: 2;
 }
 
 header .logo{
@@ -33,11 +36,7 @@ header ul.nav li:hover{
     opacity: 0.5;
 }
 
-header .presentation{
-    background: url('./img/presentation.jpg') no-repeat;
-    width: 100%;
-    height: 500px;
-    background-size: cover;
-    background-position: center center;
+header .button_area{
+    display: flex;
+    gap:10px;
 }
-

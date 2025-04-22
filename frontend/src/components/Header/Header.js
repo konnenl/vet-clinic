@@ -9,10 +9,12 @@ export default function Header() {
             <ul className="nav">
               <li>ИСТОРИЯ</li>
               <li>УСЛУГИ</li>
-              <li>ЗАПИСИ</li>
               <li>ВОПРОСЫ</li>
             </ul>
-            <GreenButton buttonText='ВОЙТИ'/>
+            <div className="button_area">
+            <GreenButton text="ЗАПИСАТЬСЯ"/>
+            <GreenButton text="ВОЙТИ"/>
+            </div>
     </header>
   )
 }
