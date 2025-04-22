@@ -1,11 +1,16 @@
 package main
 
 import (
-	"net/http"
+	_"net/http"
 	"log"
 	"github.com/labstack/echo/v4"
-	"github.com/konnenl/vet-clinic/pkg/database"
+	"github.com/konnenl/vet-clinic/internal/database"
 	"github.com/konnenl/vet-clinic/config"
+	
+	_"github.com/konnenl/vet-clinic/internal/router"
+	"github.com/konnenl/vet-clinic/internal/handler"
+	"github.com/konnenl/vet-clinic/internal/validator"
+	"github.com/konnenl/vet-clinic/internal/repository"
 )
 
 
@@ -19,20 +24,30 @@ func main(){
 	if err != nil{
 		log.Fatalf("Failed to initialize database: %q", err)
 	}
+	err = database.Migrate(db)
+	if err != nil{
+		log.Fatalf("Migration failed: %v", err)
+	}
+	log.Println("Migration completed successfully!")
 	defer func() {
 		if sqlDB, err := db.DB(); err == nil {
 			sqlDB.Close()
 		}
 	}()
 
-	e := echo.New()
-	e.GET("/", func(c echo.Context) error {
-        return c.String(http.StatusOK, "vet clinic API is running")
-    })
+	userRepo := repository.NewUserRepository(db)
 
-	log.Printf("Starting server on %s", cfg.ServerPort)
-	err = e.Start(cfg.ServerPort)
-	if err != nil{
-		log.Fatalf("Server error: %q", err)
-	}
+	userHandler := handler.NewUserHandler(userRepo)
+
+	//TODO group
+	//TODO вынести
+	//TODO auth middleware
+	e := echo.New()
+	//TODO красивый вывод от валидатора
+	e.Validator = validator.New()
+	e.POST("/users/signup", userHandler.CreateUser)
+	e.POST("/users/login", userHandler.Login)
+	e.GET("/users/:id", userHandler.GetUserByID)
+
+	e.Logger.Fatal(e.Start(cfg.ServerPort))
 }

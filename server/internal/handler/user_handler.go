@@ -19,6 +19,7 @@ func NewUserHandler(userRepo *repository.UserRepository) *UserHandler {
 	}
 }
 
+//e.POST("/auth/login", saveUser)
 func (h *UserHandler) Login(c echo.Context) error{
 	return c.JSON(http.StatusOK, "/login")
 }
@@ -29,8 +30,10 @@ func (h *UserHandler) CreateUser(c echo.Context) error {
 	if err := c.Bind(&u); err != nil{
 		return c.String(http.StatusBadRequest, "bad request")
 	}
+	if err := c.Validate(u); err != nil{
+		return err
+	}
 
-	//TODO валидация
 	//TODO вынести в func bind request
 	var user model.User
 	hashedPassword, err := user.HashPassword(u.Password)
