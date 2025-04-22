@@ -5,11 +5,13 @@ export default function ServiceCard(props) {
   return (
     <div className="service-card">
         <div className="service-card__photo">
-            <img src="props" alt="продукт" />
+            <img src="https://cdn.fishki.net/upload/post/2017/01/05/2183399/14-1.jpg" alt="продукт" />
         </div>
-        <h5>{props.name}</h5>
-        <p>{props.description}</p>  
-        <GreenButton text='Подрбнее'/>
+          <div className="service-card__action">
+          <h5>{props.name}</h5>
+          <p>{props.description}</p>  
+          <GreenButton text='Подробнее'/>
+        </div>
     </div>
   )
 }
