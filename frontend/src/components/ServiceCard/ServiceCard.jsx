@@ -1,6 +1,6 @@
 import React from 'react';
 import './ServiceCard.css';
-import GreenButton from '../GreenButton/GreenButton';
+import OrangeButton from '../OrangeButton/OrangeButton'
 export default function ServiceCard(props) {
   return (
     <div className="service-card">
@@ -10,7 +10,7 @@ export default function ServiceCard(props) {
           <div className="service-card__action">
           <h5>{props.name}</h5>
           <p>{props.description}</p>  
-          <GreenButton text='Подробнее'/>
+          <OrangeButton text='Подробнее'/>
         </div>
     </div>
   )

@@ -1,0 +1,29 @@
+.modal{
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:24px;
+    top:0;
+    left:0;
+    bottom: 0;
+    right: 0;
+    justify-content: center;
+}
+
+.modal__tittle{
+    color: var(--green-main)
+}
+
+.modal__form{}
+
+.modal__form-group{
+    left: 0;
+}
+
+.modal__form-group p{
+    font-size: var(--caption);
+    color: red;
+    opacity: 1;
+    margin-bottom: 5px;
+}

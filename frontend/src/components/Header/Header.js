@@ -1,5 +1,6 @@
 import React from 'react'
 import GreenButton from '../GreenButton/GreenButton'
+import OrangeButton from '../OrangeButton/OrangeButton'
 import './Header.css'
 
 export default function Header() {
@@ -12,7 +13,7 @@ export default function Header() {
         <li>ВОПРОСЫ</li>
       </ul>
       <div className="button_area">
-        <GreenButton text="ЗАПИСАТЬСЯ" />
+        <OrangeButton text="ЗАПИСАТЬСЯ" />
         <GreenButton text="ВОЙТИ" />
       </div>
     </header>
