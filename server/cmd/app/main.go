@@ -48,6 +48,9 @@ func main(){
 	e.POST("/users/signup", userHandler.CreateUser)
 	e.POST("/users/login", userHandler.Login)
 	e.GET("/users/:id", userHandler.GetUserByID)
+	e.PUT("/users/:id", userHandler.UpdateUser)
+	e.DELETE("/users/:id", userHandler.UnactiveUser)
+	
 
 	e.Logger.Fatal(e.Start(cfg.ServerPort))
 }
