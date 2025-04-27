@@ -21,7 +21,7 @@ type User struct {
 	IsActive    bool `gorm:"default:true"`
 }
 
-func (u *User) HashPassword(password string) (string, error){
+func HashPassword(password string) (string, error){
 	if len(password) == 0{
 		return "", errors.New("password should not be empty")
 	}

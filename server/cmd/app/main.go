@@ -4,10 +4,10 @@ import (
 	_"net/http"
 	"log"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/konnenl/vet-clinic/internal/database"
 	"github.com/konnenl/vet-clinic/config"
 	
-	_"github.com/konnenl/vet-clinic/internal/router"
 	"github.com/konnenl/vet-clinic/internal/handler"
 	"github.com/konnenl/vet-clinic/internal/validator"
 	"github.com/konnenl/vet-clinic/internal/repository"
@@ -34,23 +34,17 @@ func main(){
 			sqlDB.Close()
 		}
 	}()
-
-	userRepo := repository.NewUserRepository(db)
-
-	userHandler := handler.NewUserHandler(userRepo)
-
-	//TODO group
-	//TODO вынести
-	//TODO auth middleware
-	e := echo.New()
-	//TODO красивый вывод от валидатора
-	e.Validator = validator.New()
-	e.POST("/users/signup", userHandler.CreateUser)
-	e.POST("/users/login", userHandler.Login)
-	e.GET("/users/:id", userHandler.GetUserByID)
-	e.PUT("/users/:id", userHandler.UpdateUser)
-	e.DELETE("/users/:id", userHandler.UnactiveUser)
 	
+	e := echo.New()
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: `${time_rfc3339} | ${method} | ${uri} | ${status} | ${latency_human}` + "\n",
+	}))
+	//TODO вывод от валидатора
+	e.Validator = validator.New()
 
+	repos := repository.NewRepository(db)
+	handlers := handler.NewHandler(repos)
+
+	handlers.InitRoutes(e)
 	e.Logger.Fatal(e.Start(cfg.ServerPort))
 }

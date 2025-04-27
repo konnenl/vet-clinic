@@ -11,19 +11,56 @@ import(
 )
 
 type UserHandler struct{
-	UserRepository *repository.UserRepository
+	repo repository.UserRepository
 }
 
-func NewUserHandler(userRepository *repository.UserRepository) *UserHandler {
-	return &UserHandler{
-		UserRepository: userRepository,
-	}
+func NewUserHandler(repo repository.UserRepository) *UserHandler{
+	return &UserHandler{repo: repo}
 }
 
 //TODO not found везде
+//TODO errors
 
-//e.POST("/auth/login", saveUser)
-func (h *UserHandler) Login(c echo.Context) error{
+//POST("/sign-up", signUp)
+func (h *UserHandler) signUp(c echo.Context) error {
+	var r userRegisterRequest
+	if err := c.Bind(&r); err != nil{
+		return c.JSON(http.StatusBadRequest, echo.Map{
+            "error": "Bad request",
+        })
+	}
+
+	if err := c.Validate(r); err != nil{
+		return c.JSON(http.StatusBadRequest, echo.Map{
+            "error": "Bad request",
+        })
+	}
+
+	//TODO вынести в func bind request
+	hashedPassword, err := model.HashPassword(r.Password)
+	if err != nil{
+		return c.JSON(http.StatusBadRequest, echo.Map{
+            "error": "Bad request",
+        })
+	}
+	user := &model.User{
+		Name: r.Name,
+		Surname: r.Surname,
+		Email: r.Email,
+		Password: hashedPassword,
+		Role: "client",
+	}
+
+	if err := h.repo.Create(user); err != nil{
+		return c.JSON(http.StatusInternalServerError, echo.Map{
+			"error": "Failed to create user",
+		})
+	}
+	return c.JSON(http.StatusCreated, r)
+}
+
+//POST("/sign-in", signIn)
+func (h *UserHandler) signIn(c echo.Context) error{
 	var u userLoginRequest
 	if err := c.Bind(&u); err != nil{
 		return c.JSON(http.StatusBadRequest, echo.Map{
@@ -33,57 +70,23 @@ func (h *UserHandler) Login(c echo.Context) error{
 	if err := c.Validate(u); err != nil{
 		return err
 	}
-	//user, err := h.UserRepository.GetByEmail(u.Email)
+	//user, err := h.repo.GetByEmail(u.Email)
 
 	return c.JSON(http.StatusOK, "/login")
 }
 
-//e.POST("/user", CreateUser)
-func (h *UserHandler) CreateUser(c echo.Context) error {
-	var u userRegisterRequest
-	if err := c.Bind(&u); err != nil{
-		return c.JSON(http.StatusBadRequest, echo.Map{
-            "error": "Bad request",
-        })
-	}
-	if err := c.Validate(u); err != nil{
-		return err
-	}
-
-	//TODO вынести в func bind request
-	var user model.User
-	hashedPassword, err := user.HashPassword(u.Password)
-	if err != nil{
-		return c.JSON(http.StatusBadRequest, echo.Map{
-            "error": "Bad request",
-        })
-	}
-	user.Name = u.Name
-	user.Surname = u.Surname
-	user.Email = u.Email
-	user.Password = hashedPassword
-	user.Role = "client"
-
-	if err := h.UserRepository.Create(&user); err != nil{
-		return c.JSON(http.StatusInternalServerError, echo.Map{
-			"error": "Failed to create user",
-		})
-	}
-	return c.JSON(http.StatusCreated, u)
-}
-
-//e.GET("/user", GetUserByID)
-func (h *UserHandler) GetUserByID(c echo.Context) error{
+//GET("/users/:id", getUserByID)
+func (h *UserHandler) getUserByID(c echo.Context) error{
 	idStr := c.Param("id")
 
-	id, err := strconv.Atoi(idStr)
+	id, err := strconv.ParseUint(idStr, 10, 32)
     if err != nil {
         return c.JSON(http.StatusBadRequest, echo.Map{
             "error": "Invalid ID format",
         })
     }
 
-	user, err := h.UserRepository.GetByID(id)
+	user, err := h.repo.GetByID(uint(id))
 	if err != nil{
 		return c.JSON(http.StatusInternalServerError, echo.Map{
 			"error": "Failed to get user",
@@ -94,11 +97,11 @@ func (h *UserHandler) GetUserByID(c echo.Context) error{
 }
 
 //TODO id через токен
-//e.POST("/users/:id", userHandler.UpdateUser)
-func (h * UserHandler) UpdateUser(c echo.Context) error{
+//PUT("/users/:id", updateUser)
+func (h *UserHandler) updateUser(c echo.Context) error{
 	idStr := c.Param("id")
 
-	id, err := strconv.Atoi(idStr)
+	id, err := strconv.ParseUint(idStr, 10, 32)
     if err != nil {
         return c.JSON(http.StatusBadRequest, echo.Map{
             "error": "Invalid ID format",
@@ -129,7 +132,7 @@ func (h * UserHandler) UpdateUser(c echo.Context) error{
 	user.Email = u.Email
 	user.PhoneNumber = u.PhoneNumber
 
-	if err := h.UserRepository.Update(&user); err != nil{
+	if err := h.repo.Update(&user); err != nil{
         if err == gorm.ErrRecordNotFound {
             return c.JSON(http.StatusNotFound, echo.Map{
                 "error": "User not found",
@@ -144,10 +147,10 @@ func (h * UserHandler) UpdateUser(c echo.Context) error{
 	})
 }
 
-//e.DELETE("/users/:id", userHandler.DeleteUser)
-func(h *UserHandler) UnactiveUser(c echo.Context) error{
+//DELETE("/users/:id", unactiveUser)
+func(h *UserHandler) unactiveUser(c echo.Context) error{
 	idStr := c.Param("id")
-	id, err := strconv.Atoi(idStr)
+	id, err := strconv.ParseUint(idStr, 10, 32)
     if err != nil {
         return c.JSON(http.StatusBadRequest, echo.Map{
             "error": "Invalid ID format",
@@ -156,7 +159,7 @@ func(h *UserHandler) UnactiveUser(c echo.Context) error{
 
 	//TODO id from token, проверка прав на удаление
 	//TODO вынести ошибки, убрать использование gorm
-	err = h.UserRepository.Unactive(id)
+	err = h.repo.Deactivate(uint(id))
 	if err != nil{
         if err == gorm.ErrRecordNotFound {
             return c.JSON(http.StatusNotFound, echo.Map{
