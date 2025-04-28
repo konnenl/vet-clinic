@@ -8,7 +8,12 @@
     --font-color-main: #222;
     --green-main: #208760;
     --orange-main: #FFA629;
+    --h1: 64px;
+    --h2: 48px;
+    --h3: 40px;
+    --h4: 32px;
     --h5: 24px;
+    --h6: 20px;
     --caption: 12px;
     --shadow: rgb(197, 197, 197);
 }
@@ -49,24 +54,27 @@ body{
     color: var(--green-main);
 }
 
+main{
+    padding: 34px 25px;
+}
 
 h1{
-    font-size: 64px;
+    font-size: var(--h1);
 }
 h2{
-    font-size: 48px;
+    font-size: var(--h2);
 }
 h3{
-    font-size: 40px;
+    font-size: var(--h3);
 }
 h4{
-    font-size: 32px;
+    font-size: var(--h4);
 }
 h5{
-    font-size: 25px;
+    font-size: var(--h5);
 }
 h6{
-    font-size: 20px;
+    font-size: var(--h6);
 }
 p{
     font-size: 16px;
@@ -90,3 +98,4 @@ p{
     flex-wrap: wrap;
     justify-content: space-between;
 }
+

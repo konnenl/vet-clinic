@@ -1,8 +1,8 @@
 import Landing from "./pages/Landing";
-import AuthModal from "./components/AuthModal/AuthModal";
+import Catalogue from "./pages/Catalogue";
 function App() {
   return (
-    <Landing/>
+    <Catalogue/>
   );
 }
 
