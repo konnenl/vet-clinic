@@ -54,6 +54,10 @@ body{
     color: var(--green-main);
 }
 
+a{
+    outline: none;
+}
+
 main{
     padding: 34px 25px;
 }

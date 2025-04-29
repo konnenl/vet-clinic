@@ -1,17 +1,20 @@
 import React from 'react';
 import './ServiceCard.css';
-import OrangeButton from '../OrangeButton/OrangeButton'
+
 export default function ServiceCard(props) {
   return (
-    <div className="service-card">
-        <div className="service-card__photo">
-            <img src={props.src} alt="продукт" />
+    <div className="service-card__wrapper">
+      <div className="service-card">
+        <div className="service-card__content">
+          <div className="content__text">
+            <p className="content__title">{props.name}</p>
+            <p className="content__service-count">{props.count}33 услуг</p>
+          </div>
+          <div className="content__image">
+            <img className="service-image" src={props.src} />
+          </div>
         </div>
-          <div className="service-card__action">
-          <h5>{props.name}</h5>
-          <p>{props.description}</p>  
-          <OrangeButton text='Подробнее'/>
-        </div>
+      </div>
     </div>
-  )
+  );
 }

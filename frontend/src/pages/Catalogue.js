@@ -8,7 +8,7 @@ export default function Catalogue() {
 
   const [filter,setFilter]=useState('all')
   const [services, setServices] = useState([
-    { id: 1, name: "УЗИ диагностика", category: "diagnostics", description: "Ультразвуковое исследование внутренних органов", src: "https://img.freepik.com/free-photo/close-up-veterinarian-taking-care-pet_23-2149143882.jpg?t=st=1745314334~exp=1745317934~hmac=d3f76f29391e66284ede3bf48d39c8f455572a048c8deaacce853d6b55ece59f&w=1380" },
+    { id: 1, name: "УЗИ диагностика", category: "diagnostics", description: "Ультразвуковое исследование внутренних органов", src: "https://e7.pngegg.com/pngimages/240/705/png-clipart-golden-retriever-puppy-dog-breed-labrador-retriever-beagle-golden-retriever-animals-carnivoran.png" },
     { id: 2, name: "Анализы крови", category: "diagnostics", description: "Лабораторные исследования крови", src: "https://img.freepik.com/free-photo/close-up-veterinarian-taking-care-pet_23-2149143882.jpg?t=st=1745314334~exp=1745317934~hmac=d3f76f29391e66284ede3bf48d39c8f455572a048c8deaacce853d6b55ece59f&w=1380"},
     { id: 3, name: "Терапия", category: "treatment", description: "Консервативное лечение заболеваний", src: "https://img.freepik.com/free-photo/close-up-veterinarian-taking-care-pet_23-2149143882.jpg?t=st=1745314334~exp=1745317934~hmac=d3f76f29391e66284ede3bf48d39c8f455572a048c8deaacce853d6b55ece59f&w=1380"},
     { id: 4, name: "Капельницы", category: "treatment", description: "Инфузионная терапия", src: "https://img.freepik.com/free-photo/close-up-veterinarian-taking-care-pet_23-2149143882.jpg?t=st=1745314334~exp=1745317934~hmac=d3f76f29391e66284ede3bf48d39c8f455572a048c8deaacce853d6b55ece59f&w=1380" },
