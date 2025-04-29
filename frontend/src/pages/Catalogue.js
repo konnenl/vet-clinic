@@ -30,13 +30,14 @@ export default function Catalogue() {
     document.title = 'Каталог'
   },[])
 
-  const filteredServices = filter === "all"  ? services : services.filter(service => services.category == filter);                                                       
+  const filteredServices = filter === "all"  ? services : services.filter(service => service.category == filter);                                                       
   
   return (
     <div className="wrapper">
       <Header />
       <main>
-        <DropDown />
+        <span>Категории услуг: </span>
+      <DropDown value={filter} onValueChange={setFilter} options={categoryNames}></DropDown>
         {filteredServices.length > 0 ? (
             <div style={{ 
               display: 'flex', 
@@ -45,7 +46,6 @@ export default function Catalogue() {
               marginTop: '32px',
               paddingTop:'20px',
               borderRadius: '12px',
-              backgroundColor: '#66a08a'
             }}>
               {filteredServices.map(service => (
                 <ServiceCard 

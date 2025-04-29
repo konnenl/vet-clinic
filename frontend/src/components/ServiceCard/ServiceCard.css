@@ -3,6 +3,7 @@
     width: 300px;
     background-color: var(--background-color);
     border-radius: 12px;
+    border: 2px var(--green-main) solid;
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
