@@ -1,27 +1,34 @@
 package handler
 
-import(
-	"github.com/labstack/echo/v4"
+import (
+	"github.com/konnenl/vet-clinic/internal/auth"
 	"github.com/konnenl/vet-clinic/internal/repository"
+	"github.com/labstack/echo/v4"
 )
 
-type Handler struct{
-	User *UserHandler
+type Handler struct {
+	AuthService *auth.JWTService
+	user        *userHandler
+	auth        *authHandler
 }
 
-func NewHandler(repository *repository.Repository) *Handler{
+func NewHandler(repository *repository.Repository, authService *auth.JWTService) *Handler {
 	return &Handler{
-		User: NewUserHandler(repository.User),
+		AuthService: authService,
+		user:        newUserHandler(repository.User),
+		auth:        newAuthHandler(repository.User, authService),
 	}
 }
 
-func(h *Handler) InitRoutes(e *echo.Echo){
+func (h *Handler) InitRoutes(e *echo.Echo) {
 	auth := e.Group("/auth")
-	auth.POST("/sign-up", h.User.signUp)
-	auth.POST("/sign-in", h.User.signIn)
+	auth.POST("/signup", h.auth.signUp)
+	auth.POST("/signin", h.auth.signIn)
+	auth.POST("/logout", h.auth.logout)
 
-	users := e.Group("/users")
-	users.GET("/:id", h.User.getUserByID)
-	users.PUT("/:id", h.User.updateUser)
-	users.DELETE("/:id", h.User.unactiveUser)
+	users := e.Group("/profile")
+	users.Use(h.AuthService.Middleware())
+	users.GET("/", h.user.getProfile)
+	users.PUT("/user", h.user.updateUser)
+	users.DELETE("/", h.user.unactiveUser)
 }

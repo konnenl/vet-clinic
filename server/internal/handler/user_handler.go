@@ -1,94 +1,41 @@
 package handler
 
-import(
-	"net/http"
+import (
 	"github.com/labstack/echo/v4"
-	"strconv"
 	"gorm.io/gorm"
+	"net/http"
 
+	"github.com/konnenl/vet-clinic/internal/auth"
 	"github.com/konnenl/vet-clinic/internal/model"
 	"github.com/konnenl/vet-clinic/internal/repository"
 )
 
-type UserHandler struct{
+type userHandler struct {
 	repo repository.UserRepository
 }
 
-func NewUserHandler(repo repository.UserRepository) *UserHandler{
-	return &UserHandler{repo: repo}
+func newUserHandler(repo repository.UserRepository) *userHandler {
+	return &userHandler{
+		repo: repo,
+	}
 }
 
 //TODO not found везде
 //TODO errors
 
-//POST("/sign-up", signUp)
-func (h *UserHandler) signUp(c echo.Context) error {
-	var r userRegisterRequest
-	if err := c.Bind(&r); err != nil{
-		return c.JSON(http.StatusBadRequest, echo.Map{
-            "error": "Bad request",
-        })
+// GET("/profile", getProfile)
+func (h *userHandler) getProfile(c echo.Context) error {
+	claims, err := auth.GetClaims(c)
+	if err != nil {
+		if httpErr, ok := err.(*echo.HTTPError); ok {
+			return httpErr
+		}
+		return echo.NewHTTPError(401, "Invalid authentication")
 	}
 
-	if err := c.Validate(r); err != nil{
-		return c.JSON(http.StatusBadRequest, echo.Map{
-            "error": "Bad request",
-        })
-	}
-
-	//TODO вынести в func bind request
-	hashedPassword, err := model.HashPassword(r.Password)
-	if err != nil{
-		return c.JSON(http.StatusBadRequest, echo.Map{
-            "error": "Bad request",
-        })
-	}
-	user := &model.User{
-		Name: r.Name,
-		Surname: r.Surname,
-		Email: r.Email,
-		Password: hashedPassword,
-		Role: "client",
-	}
-
-	if err := h.repo.Create(user); err != nil{
-		return c.JSON(http.StatusInternalServerError, echo.Map{
-			"error": "Failed to create user",
-		})
-	}
-	return c.JSON(http.StatusCreated, r)
-}
-
-//POST("/sign-in", signIn)
-func (h *UserHandler) signIn(c echo.Context) error{
-	var u userLoginRequest
-	if err := c.Bind(&u); err != nil{
-		return c.JSON(http.StatusBadRequest, echo.Map{
-            "error": "Bad request",
-        })
-	}
-	if err := c.Validate(u); err != nil{
-		return err
-	}
-	//user, err := h.repo.GetByEmail(u.Email)
-
-	return c.JSON(http.StatusOK, "/login")
-}
-
-//GET("/users/:id", getUserByID)
-func (h *UserHandler) getUserByID(c echo.Context) error{
-	idStr := c.Param("id")
-
-	id, err := strconv.ParseUint(idStr, 10, 32)
-    if err != nil {
-        return c.JSON(http.StatusBadRequest, echo.Map{
-            "error": "Invalid ID format",
-        })
-    }
-
-	user, err := h.repo.GetByID(uint(id))
-	if err != nil{
-		return c.JSON(http.StatusInternalServerError, echo.Map{
+	user, err := h.repo.GetByID(uint(claims.UserId))
+	if err != nil {
+		return c.JSON(500, echo.Map{
 			"error": "Failed to get user",
 		})
 	}
@@ -96,49 +43,48 @@ func (h *UserHandler) getUserByID(c echo.Context) error{
 	return c.JSON(http.StatusOK, u)
 }
 
-//TODO id через токен
-//PUT("/users/:id", updateUser)
-func (h *UserHandler) updateUser(c echo.Context) error{
-	idStr := c.Param("id")
-
-	id, err := strconv.ParseUint(idStr, 10, 32)
-    if err != nil {
-        return c.JSON(http.StatusBadRequest, echo.Map{
-            "error": "Invalid ID format",
-        })
-    }
+// PUT("/profile/user", updateUser)
+func (h *userHandler) updateUser(c echo.Context) error {
+	claims, err := auth.GetClaims(c)
+	if err != nil {
+		if httpErr, ok := err.(*echo.HTTPError); ok {
+			return httpErr
+		}
+		return echo.NewHTTPError(401, "Invalid authentication")
+	}
 
 	var u userUpdateRequest
-	if err := c.Bind(&u); err != nil{
-		return c.JSON(http.StatusBadRequest, echo.Map{
-            "error": "Bad request",
-        })
+	if err := c.Bind(&u); err != nil {
+		return c.JSON(400, echo.Map{
+			"error": "Bad request",
+		})
 	}
-	if err := c.Validate(u); err != nil{
-		return c.JSON(http.StatusBadRequest, echo.Map{
-            "error": "Bad request",
-        })
+	if err := c.Validate(u); err != nil {
+		return c.JSON(400, echo.Map{
+			"error": "Bad request",
+		})
 	}
 	var user model.User
-	if err != nil{
-		return c.JSON(http.StatusBadRequest, echo.Map{
-            "error": "Bad request",
-        })
+	if err != nil {
+		return c.JSON(400, echo.Map{
+			"error": "Bad request",
+		})
 	}
-	user.ID = uint(id)
+	//TODO в request bind
+	user.ID = uint(claims.UserId)
 	user.Name = u.Name
 	user.Surname = u.Surname
 	user.Patronymic = u.Patronymic
 	user.Email = u.Email
 	user.PhoneNumber = u.PhoneNumber
 
-	if err := h.repo.Update(&user); err != nil{
-        if err == gorm.ErrRecordNotFound {
-            return c.JSON(http.StatusNotFound, echo.Map{
-                "error": "User not found",
-            })
-        }
-		return c.JSON(http.StatusInternalServerError, echo.Map{
+	if err := h.repo.Update(&user); err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return c.JSON(404, echo.Map{
+				"error": "User not found",
+			})
+		}
+		return c.JSON(500, echo.Map{
 			"error": "Failed to update user",
 		})
 	}
@@ -147,29 +93,37 @@ func (h *UserHandler) updateUser(c echo.Context) error{
 	})
 }
 
-//DELETE("/users/:id", unactiveUser)
-func(h *UserHandler) unactiveUser(c echo.Context) error{
-	idStr := c.Param("id")
-	id, err := strconv.ParseUint(idStr, 10, 32)
-    if err != nil {
-        return c.JSON(http.StatusBadRequest, echo.Map{
-            "error": "Invalid ID format",
-        })
-    }
-
-	//TODO id from token, проверка прав на удаление
-	//TODO вынести ошибки, убрать использование gorm
-	err = h.repo.Deactivate(uint(id))
-	if err != nil{
-        if err == gorm.ErrRecordNotFound {
-            return c.JSON(http.StatusNotFound, echo.Map{
-                "error": "User not found",
-            })
-        }
-		return c.JSON(http.StatusInternalServerError, echo.Map{
+// DELETE("/profile", unactiveUser)
+func (h *userHandler) unactiveUser(c echo.Context) error {
+	claims, err := auth.GetClaims(c)
+	if err != nil {
+		if httpErr, ok := err.(*echo.HTTPError); ok {
+			return httpErr
+		}
+		return echo.NewHTTPError(401, "Invalid authentication")
+	}
+	err = h.repo.Deactivate(claims.UserId)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return c.JSON(404, echo.Map{
+				"error": "User not found",
+			})
+		}
+		return c.JSON(500, echo.Map{
 			"error": "Failed to delete user",
 		})
 	}
+
+	c.SetCookie(&http.Cookie{
+		Name:     "token",
+		Value:    "",
+		HttpOnly: true,
+		Path: "/",
+		MaxAge: -1,
+		//Secure:   true,
+	})
+
+
 	return c.JSON(http.StatusOK, echo.Map{
 		"message": "User deactivated successfully",
 	})

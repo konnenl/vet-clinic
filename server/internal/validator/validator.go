@@ -1,16 +1,16 @@
 package validator
 
 import (
-	"net/http"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
+	"net/http"
 )
 
 type CustomValidator struct {
 	Validator *validator.Validate
 }
 
-func New() *CustomValidator{
+func New() *CustomValidator {
 	v := validator.New()
 	return &CustomValidator{Validator: v}
 
