@@ -16,7 +16,7 @@ type User struct {
 	Surname     string `gorm:"not null"`
 	Patronymic  string
 	Role        string `gorm:"type:text"`
-	IsActive    bool     `gorm:"default:true"`
+	IsActive    bool   `gorm:"default:true"`
 }
 
 func HashPassword(password string) (string, error) {

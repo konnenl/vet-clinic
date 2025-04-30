@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 	"net/http"
@@ -35,12 +36,17 @@ func (h *userHandler) getProfile(c echo.Context) error {
 
 	user, err := h.repo.GetByID(uint(claims.UserId))
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.JSON(404, echo.Map{
+				"error": "User not found",
+			})
+		}
 		return c.JSON(500, echo.Map{
-			"error": "Failed to get user",
+			"error": "Internal error",
 		})
 	}
 	u := newUserResponse(user)
-	return c.JSON(http.StatusOK, u)
+	return c.JSON(200, u)
 }
 
 // PUT("/profile/user", updateUser)
@@ -53,32 +59,27 @@ func (h *userHandler) updateUser(c echo.Context) error {
 		return echo.NewHTTPError(401, "Invalid authentication")
 	}
 
-	var u userUpdateRequest
-	if err := c.Bind(&u); err != nil {
+	var r userUpdateRequest
+	if err := c.Bind(&r); err != nil {
 		return c.JSON(400, echo.Map{
 			"error": "Bad request",
 		})
 	}
-	if err := c.Validate(u); err != nil {
+	if err := c.Validate(r); err != nil {
 		return c.JSON(400, echo.Map{
 			"error": "Bad request",
 		})
 	}
-	var user model.User
-	if err != nil {
-		return c.JSON(400, echo.Map{
-			"error": "Bad request",
-		})
-	}
-	//TODO в request bind
-	user.ID = uint(claims.UserId)
-	user.Name = u.Name
-	user.Surname = u.Surname
-	user.Patronymic = u.Patronymic
-	user.Email = u.Email
-	user.PhoneNumber = u.PhoneNumber
 
-	if err := h.repo.Update(&user); err != nil {
+	user := &model.User{
+		Name:        r.Name,
+		Surname:     r.Surname,
+		Patronymic:  r.Patronymic,
+		Email:       r.Email,
+		PhoneNumber: r.PhoneNumber,
+	}
+
+	if err := h.repo.Update(user, uint(claims.UserId)); err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return c.JSON(404, echo.Map{
 				"error": "User not found",
@@ -118,11 +119,10 @@ func (h *userHandler) unactiveUser(c echo.Context) error {
 		Name:     "token",
 		Value:    "",
 		HttpOnly: true,
-		Path: "/",
-		MaxAge: -1,
+		Path:     "/",
+		MaxAge:   -1,
 		//Secure:   true,
 	})
-
 
 	return c.JSON(http.StatusOK, echo.Map{
 		"message": "User deactivated successfully",

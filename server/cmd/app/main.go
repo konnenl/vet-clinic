@@ -1,9 +1,9 @@
 package main
 
 import (
-	"log"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"log"
 
 	"github.com/konnenl/vet-clinic/config"
 	"github.com/konnenl/vet-clinic/internal/auth"
@@ -36,13 +36,13 @@ func main() {
 
 	e := echo.New()
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: `${time_rfc3339} | ${method} | ${uri} | ${status} | ${latency_human}` + "\n",
+		Format: `${time_rfc3339} | ${method} | ${uri} | ${status} | ${latency_human} | ${error}` + "\n",
 	}))
 	//TODO вывод от валидатора
 	e.Validator = validator.New()
 
 	repos := repository.NewRepository(db)
-	authService := auth.New(cfg.JWTSecretKey, 24 * 60)
+	authService := auth.New(cfg.JWTSecretKey, 24*60)
 	handlers := handler.NewHandler(repos, authService)
 
 	handlers.InitRoutes(e)

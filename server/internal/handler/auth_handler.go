@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/labstack/echo/v4"
 	"net/http"
+	"strings"
 
 	"github.com/konnenl/vet-clinic/internal/auth"
 	"github.com/konnenl/vet-clinic/internal/model"
@@ -24,7 +25,7 @@ func newAuthHandler(repo repository.UserRepository, authService *auth.JWTService
 //TODO not found везде
 //TODO errors
 
-//POST("auth/signup", signUp)
+// POST("auth/signup", signUp)
 func (h *authHandler) signUp(c echo.Context) error {
 	var r userRegisterRequest
 	if err := c.Bind(&r); err != nil {
@@ -35,7 +36,7 @@ func (h *authHandler) signUp(c echo.Context) error {
 
 	if err := c.Validate(r); err != nil {
 		return c.JSON(400, echo.Map{
-			"error": "Bad request",
+			"error":   "Bad request",
 		})
 	}
 
@@ -55,6 +56,11 @@ func (h *authHandler) signUp(c echo.Context) error {
 	}
 	id, err := h.repo.Create(user)
 	if err != nil {
+		if strings.Contains(err.Error(), "email already exist") {
+			return c.JSON(409, echo.Map{
+				"error": "Email already in use",
+			})
+		}
 		return c.JSON(500, echo.Map{
 			"error": "Failed to create user",
 		})
@@ -63,7 +69,7 @@ func (h *authHandler) signUp(c echo.Context) error {
 	token, err := h.authService.GenerateToken(id, user.Role)
 	if err != nil {
 		return c.JSON(500, echo.Map{
-			"error": "Failed to generate token",
+			"error": "Internal error",
 		})
 	}
 
@@ -71,17 +77,17 @@ func (h *authHandler) signUp(c echo.Context) error {
 		Name:     "token",
 		Value:    token,
 		HttpOnly: true,
-		Path: "/",
-		MaxAge: h.authService.Expires,
+		Path:     "/",
+		MaxAge:   h.authService.Expires,
 		//Secure:   true,
 	})
 
 	return c.JSON(201, echo.Map{
-		"id":    id,
+		"id": id,
 	})
 }
 
-//POST("auth/signin", signIn)
+// POST("auth/signin", signIn)
 func (h *authHandler) signIn(c echo.Context) error {
 	var r userLoginRequest
 	if err := c.Bind(&r); err != nil {
@@ -98,11 +104,11 @@ func (h *authHandler) signIn(c echo.Context) error {
 			"error": "Invalid credentials",
 		})
 	}
-	
+
 	token, err := h.authService.GenerateToken(user.ID, user.Role)
 	if err != nil {
 		return c.JSON(500, echo.Map{
-			"error": "Failed to generate token",
+			"error": "Internal error",
 		})
 	}
 
@@ -110,13 +116,13 @@ func (h *authHandler) signIn(c echo.Context) error {
 		Name:     "token",
 		Value:    token,
 		HttpOnly: true,
-		Path: "/",
-		MaxAge: h.authService.Expires,
+		Path:     "/",
+		MaxAge:   h.authService.Expires,
 		//Secure:   true,
 	})
 
 	return c.JSON(200, echo.Map{
-		"id":    user.ID,
+		"id": user.ID,
 	})
 }
 
@@ -125,8 +131,8 @@ func (h *authHandler) logout(c echo.Context) error {
 		Name:     "token",
 		Value:    "",
 		HttpOnly: true,
-		Path: "/",
-		MaxAge: -1,
+		Path:     "/",
+		MaxAge:   -1,
 		//Secure:   true,
 	})
 
