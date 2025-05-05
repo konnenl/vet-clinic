@@ -1,4 +1,28 @@
 .profile-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    width: 782px;
+    height: 472px;
+    justify-items: center;
+    margin: 0 auto;
+    border-bottom: solid rgba(32, 135, 96, 0.6);
+}
+
+.profile-container__avatar {
+    justify-content: center;
+    align-content: center;
+
+}
+
+.profile-container__data {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.data-header {
+    font-size: 48px;
+    font-weight: bold;
+    align-items: top;
+    margin-bottom: 30px;
 }

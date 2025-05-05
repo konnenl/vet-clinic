@@ -1,17 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-export default function Profile() {
-    return (<div className="wrapper">
-        <Header />
-        <div className="profile-container">
-            <div className="profile-container__avatar">
-                <img src='https://e7.pngegg.com/pngimages/240/705/png-clipart-golden-retriever-puppy-dog-breed-labrador-retriever-beagle-golden-retriever-animals-carnivoran.png' alt='User avatar' />
-            </div>
-            <div className="profile-container__data">
+import ProfileLabel from '../../components/ProfileLabel/ProfileLabel';
+import ava from '../../img/ava.svg';
+import './Profile.css';
 
+export default function Profile() {
+    return (
+        <div className="wrapper">
+            <Header />
+            <div className="profile-container">
+                <div className="profile-container__avatar">
+                    <img src={ava} alt='User avatar' />
+                </div>
+                <div className="profile-container__data">
+                    <h className='data-header'>Владелец</h>
+                    <ProfileLabel label_text="Камиль" label_header="Имя" />
+                    <ProfileLabel label_text="Бахтияров" label_header="Фамилия" />
+                    <ProfileLabel label_text="+7 967 877 85 09" label_header="Телефон" />
+                    <ProfileLabel label_text="kamabaxaxd@gmail.com" label_header="E-mail" />
+                </div>
             </div>
         </div>
-    </div>
     )
 }
