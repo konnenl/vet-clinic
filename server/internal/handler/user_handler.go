@@ -5,10 +5,12 @@ import (
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 	"net/http"
+	"strings"
 
 	"github.com/konnenl/vet-clinic/internal/auth"
 	"github.com/konnenl/vet-clinic/internal/model"
 	"github.com/konnenl/vet-clinic/internal/repository"
+	"github.com/konnenl/vet-clinic/internal/validator"
 )
 
 type userHandler struct {
@@ -20,9 +22,6 @@ func newUserHandler(repo repository.UserRepository) *userHandler {
 		repo: repo,
 	}
 }
-
-//TODO not found везде
-//TODO errors
 
 // GET("/profile", getProfile)
 func (h *userHandler) getProfile(c echo.Context) error {
@@ -67,11 +66,15 @@ func (h *userHandler) updateUser(c echo.Context) error {
 	}
 	if err := c.Validate(r); err != nil {
 		return c.JSON(400, echo.Map{
-			"error": "Bad request",
+			"error":  "Validation failed",
+			"fields": validator.GetValidationErrors(err),
 		})
 	}
 
 	user := &model.User{
+		Model: gorm.Model{
+			ID: uint(claims.UserId),
+		},
 		Name:        r.Name,
 		Surname:     r.Surname,
 		Patronymic:  r.Patronymic,
@@ -79,14 +82,19 @@ func (h *userHandler) updateUser(c echo.Context) error {
 		PhoneNumber: r.PhoneNumber,
 	}
 
-	if err := h.repo.Update(user, uint(claims.UserId)); err != nil {
+	if err := h.repo.Update(user); err != nil {
+		if strings.Contains(err.Error(), "email already exist") {
+			return c.JSON(409, echo.Map{
+				"error": "Email already in use",
+			})
+		}
 		if err == gorm.ErrRecordNotFound {
 			return c.JSON(404, echo.Map{
 				"error": "User not found",
 			})
 		}
 		return c.JSON(500, echo.Map{
-			"error": "Failed to update user",
+			"error": "Internal error",
 		})
 	}
 	return c.JSON(http.StatusOK, echo.Map{
@@ -111,7 +119,7 @@ func (h *userHandler) unactiveUser(c echo.Context) error {
 			})
 		}
 		return c.JSON(500, echo.Map{
-			"error": "Failed to delete user",
+			"error": "Internal error",
 		})
 	}
 

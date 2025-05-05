@@ -12,7 +12,7 @@ type userUpdateRequest struct {
 	Surname     string `json:"surname" validate:"required"`
 	Patronymic  string `json:"patronymic"`
 	Email       string `json:"email" validate:"required,email"`
-	PhoneNumber string `json:"phone_number"`
+	PhoneNumber string `json:"phone_number" validate:"required,phone"`
 }
 
 type userLoginRequest struct {

@@ -38,7 +38,6 @@ func main() {
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: `${time_rfc3339} | ${method} | ${uri} | ${status} | ${latency_human} | ${error}` + "\n",
 	}))
-	//TODO вывод от валидатора
 	e.Validator = validator.New()
 
 	repos := repository.NewRepository(db)

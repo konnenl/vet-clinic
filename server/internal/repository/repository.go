@@ -20,6 +20,6 @@ type UserRepository interface {
 	Authenticate(email string, password string) (*model.User, error)
 	GetByID(id uint) (*model.User, error)
 	GetByEmail(email string) (*model.User, error)
-	Update(user *model.User, id uint) error
+	Update(user *model.User) error
 	Deactivate(id uint) error
 }

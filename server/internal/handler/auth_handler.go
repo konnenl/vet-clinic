@@ -8,6 +8,7 @@ import (
 	"github.com/konnenl/vet-clinic/internal/auth"
 	"github.com/konnenl/vet-clinic/internal/model"
 	"github.com/konnenl/vet-clinic/internal/repository"
+	"github.com/konnenl/vet-clinic/internal/validator"
 )
 
 type authHandler struct {
@@ -36,7 +37,8 @@ func (h *authHandler) signUp(c echo.Context) error {
 
 	if err := c.Validate(r); err != nil {
 		return c.JSON(400, echo.Map{
-			"error":   "Bad request",
+			"error":  "Validation failed",
+			"fields": validator.GetValidationErrors(err),
 		})
 	}
 
@@ -96,7 +98,10 @@ func (h *authHandler) signIn(c echo.Context) error {
 		})
 	}
 	if err := c.Validate(r); err != nil {
-		return err
+		return c.JSON(400, echo.Map{
+			"error":  "Validation failed",
+			"fields": validator.GetValidationErrors(err),
+		})
 	}
 	user, err := h.repo.Authenticate(r.Email, r.Password)
 	if err != nil {

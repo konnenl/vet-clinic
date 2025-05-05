@@ -55,8 +55,14 @@ func (r *userRepository) GetByEmail(email string) (*model.User, error) {
 	return &user, nil
 }
 
-func (r *userRepository) Update(user *model.User, id uint) error {
-	return r.db.Save(&user).Error
+func (r *userRepository) Update(user *model.User) error {
+	if err := r.db.Save(&user).Error; err != nil {
+		if strings.Contains(err.Error(), "UNIQUE constraint failed: users.email") {
+			return errors.New("email already exist")
+		}
+		return err
+	}
+	return nil
 }
 
 func (r *userRepository) Deactivate(id uint) error {

@@ -28,7 +28,7 @@ func (h *Handler) InitRoutes(e *echo.Echo) {
 
 	users := e.Group("/profile")
 	users.Use(h.AuthService.Middleware())
-	users.GET("/", h.user.getProfile)
+	users.GET("", h.user.getProfile)
 	users.PUT("/user", h.user.updateUser)
-	users.DELETE("/", h.user.unactiveUser)
+	users.DELETE("", h.user.unactiveUser)
 }
