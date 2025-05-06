@@ -1,0 +1,9 @@
+.orange-button {
+    font-size: 20px;
+    padding: 13px 32px;
+    border-radius: 40px;
+    border: none;
+    color: var(--background-color);
+    background-color: #FFC470;
+    transition: background-color 500ms ease, color 300ms ease;
+}
