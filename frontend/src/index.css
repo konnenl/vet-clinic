@@ -96,11 +96,12 @@ p{
 }
 
 .services_area{
+    justify-content: space-between;
     margin-top: 20px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
+    gap: 20px;
 }
 
 

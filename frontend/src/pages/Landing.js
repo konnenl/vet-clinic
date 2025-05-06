@@ -1,5 +1,3 @@
-import Header from '../components/Header/Header';
-import Footer  from '../components/Footer/Footer';
 import GreenButton from '../components/GreenButton/GreenButton';
 import ServiceCard from '../components/ServiceCard/ServiceCard';
 import { useEffect } from 'react';
@@ -11,8 +9,7 @@ export default function Landing() {
   },[])
 
   return (
-    <div className="wrapper">
-      <Header />
+    <main>
       <section className="presentation">
         <div className="presentation__content">
           <div className="text__content">
@@ -31,7 +28,6 @@ export default function Landing() {
           <ServiceCard name="Груминг" src="https://optim.tildacdn.com/tild3334-3337-4236-b166-303036646231/-/resize/312x/-/format/webp/pngegg_7.png.webp"/>
         </ul>
       </section>
-      <Footer />
-    </div>
+    </main>
   )
 }

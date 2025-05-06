@@ -3,8 +3,10 @@
 }
 
 .service-card{
+    max-width: 300px;
     border-radius: 20px;
-    background-color: var(--background-color); /*#66a08a*/
+    background-color: var(--background-color);
+    border: 2px solid var(--green-main);
     overflow: hidden;
     transition: scale 0.2s, box-shadow 0.2s;
 }
@@ -18,6 +20,7 @@
 
 .content__text{
     margin: 15px 20px;
+    display: inline;
 }
 
 .content__title{
@@ -28,7 +31,7 @@
 .content__image {
     position: relative;
     height: 100%;
-    overflow: hidden;
+    display: inline;
 }
 
 .content__service-count{
@@ -39,7 +42,7 @@
     height: 100%;
     width: 100%;
     object-fit: cover;
-    object-position: center left;
+    object-position: left;
 }
 
 .service-card:hover{

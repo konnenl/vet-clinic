@@ -7,8 +7,8 @@ export default function ServiceCard(props) {
       <div className="service-card">
         <div className="service-card__content">
           <div className="content__text">
-            <p className="content__title">{props.name}</p>
-            <p className="content__service-count">{props.count}33 услуг</p>
+            <p className="content__title">{props.title}</p>
+            <p className="content__service-count">{props.count} услуг</p>
           </div>
           <div className="content__image">
             <img className="service-image" src={props.src} />
