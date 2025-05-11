@@ -1,8 +1,10 @@
-.service-card__wrapper{
-    display: table;
+.service-card__wrapper {
+    display: flex;
+    justify-content: center;
 }
 
-.service-card{
+.service-card {
+    width: 100%;
     max-width: 300px;
     border-radius: 20px;
     background-color: var(--background-color);
@@ -11,16 +13,16 @@
     transition: scale 0.2s, box-shadow 0.2s;
 }
 
-.service-card__content{
-    width:300px;
+.service-card__content {
+    width: 100%;
     height: 208px;
     display: grid;
-    grid-template-columns: 0.3fr 1.7fr;
+    grid-template-columns: 1fr 1.5fr;
 }
 
 .content__text{
     margin: 15px 20px;
-    display: inline;
+    display: inline-block;
 }
 
 .content__title{
@@ -36,6 +38,7 @@
 
 .content__service-count{
     display: inline;
+
 }
   
 .service-image {
