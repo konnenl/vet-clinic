@@ -21,6 +21,10 @@ func NewHandler(repository *repository.Repository, authService *auth.JWTService)
 }
 
 func (h *Handler) InitRoutes(e *echo.Echo) {
+	e.GET("/test", func(c echo.Context) error {
+		return echo.NewHTTPError(200, "vet-clinic")
+	})
+
 	auth := e.Group("/auth")
 	auth.POST("/signup", h.auth.signUp)
 	auth.POST("/signin", h.auth.signIn)
