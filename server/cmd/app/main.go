@@ -38,12 +38,19 @@ func main() {
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: `${time_rfc3339} | ${method} | ${uri} | ${status} | ${latency_human} | ${error}` + "\n",
 	}))
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+        AllowOrigins: []string{"http://localhost:3000"},
+        AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
+        AllowHeaders: []string{echo.HeaderAuthorization, echo.HeaderContentType},
+    }))
 	e.Validator = validator.New()
 
 	repos := repository.NewRepository(db)
 	authService := auth.New(cfg.JWTSecretKey, 24*60)
 	handlers := handler.NewHandler(repos, authService)
 
+	port := ":" + cfg.ServerPort
+
 	handlers.InitRoutes(e)
-	e.Logger.Fatal(e.Start(cfg.ServerPort))
+	e.Logger.Fatal(e.Start(port))
 }
