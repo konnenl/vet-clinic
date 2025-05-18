@@ -44,6 +44,7 @@ func main() {
 	authService := auth.New(cfg.JWTSecretKey, 24*60)
 	handlers := handler.NewHandler(repos, authService)
 
+	port := ":" + cfg.ServerPort
 	handlers.InitRoutes(e)
-	e.Logger.Fatal(e.Start(cfg.ServerPort))
+	e.Logger.Fatal(e.Start(port))
 }

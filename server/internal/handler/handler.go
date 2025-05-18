@@ -16,6 +16,7 @@ func NewHandler(repository *repository.Repository, authService *auth.JWTService)
 	return &Handler{
 		AuthService: authService,
 		user:        newUserHandler(repository.User),
+		pet:        newPetHandler(repository.Pet),
 		auth:        newAuthHandler(repository.User, authService),
 	}
 }
@@ -31,4 +32,7 @@ func (h *Handler) InitRoutes(e *echo.Echo) {
 	users.GET("", h.user.getProfile)
 	users.PUT("/user", h.user.updateUser)
 	users.DELETE("", h.user.unactiveUser)
+	users.POST("/pet", h.pet.createPet)
+	users.Put("/pet", h.pet.updatePet)
+	users.DELETE("/pet", h.pet.unactivePet)
 }
