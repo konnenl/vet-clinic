@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="wrapper">
       <Header />
-      <Cart />
+      <Catalogue />
       <Footer/>
     </div>
   );
