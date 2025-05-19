@@ -1,4 +1,4 @@
-.modal-overlay{
+.modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,12 +11,12 @@
     z-index: 1000;
 }
 
-.modal{
+.modal {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    height:600px;
+    height: 600px;
     background: var(--background-color);
     padding: 20px;
     border-radius: 12px;
@@ -34,31 +34,52 @@
     background: none;
     font-size: 20px;
     cursor: pointer;
-  }
-.modal__container{
+}
+
+.modal__container {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.modal__tittle{
+.modal__tittle {
     color: var(--green-main)
 }
 
-.modal__form-group{
-    left: 0;
+.modal__form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.modal__form-group p{
+.modal__form-group {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal__form-group p {
     font-size: var(--caption);
     color: red;
     opacity: 0;
     margin-bottom: 5px;
 }
 
-.modal__button-area{
+.modal__button-area {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap:10px;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+}
+
+.modal a {
+    color: var(--green-main);
+    text-decoration: none;
+    margin-top: 10px;
 }
