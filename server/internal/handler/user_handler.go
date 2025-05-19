@@ -44,7 +44,7 @@ func (h *userHandler) getProfile(c echo.Context) error {
 			"error": "Internal error",
 		})
 	}
-	u := newClientResponse(client)
+	u := newClientPetResponse(client)
 	return c.JSON(200, u)
 }
 

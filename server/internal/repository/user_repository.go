@@ -22,7 +22,10 @@ func (r *userRepository) Create(user *model.User) (uint, error) {
 		}
 		return 0, err
 	}
-	if err := r.db.Create(&model.Client{}).Error; err != nil {
+	client := &model.Client{
+		UserID: user.ID, 
+	}
+	if err := r.db.Create(client).Error; err != nil {
 		return 0, err
 	}
 	return user.ID, nil
@@ -42,9 +45,10 @@ func (r *userRepository) Authenticate(email string, password string) (*model.Use
 	return user, nil
 }
 
+//TODO check is active
 func (r *userRepository) GetByID(id uint) (*model.Client, error) {
 	var client model.Client
-	if err := r.db.Preload("User").Where("user_id = ?", id).First(&client).Error; err != nil {
+	if err := r.db.Preload("User").Preload("Pets").Where("user_id = ?", id).First(&client).Error; err != nil {
 		return nil, err
 	}
 	return &client, nil

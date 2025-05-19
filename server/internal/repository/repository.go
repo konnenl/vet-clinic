@@ -33,7 +33,7 @@ type ServiceRepository interface {
 }
 
 type PetRepository interface {
-	Create(pet *model.Pet) (uint, error)
+	Create(pet *model.Pet, id uint) (uint, error)
 	GetByID(id uint) (*model.Pet, error)
 	Update(pet *model.Pet) error
 	GetTypes() ([]*model.Type, error)

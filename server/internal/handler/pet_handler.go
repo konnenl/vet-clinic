@@ -6,6 +6,8 @@ import (
 	"github.com/konnenl/vet-clinic/internal/model"
 	"github.com/konnenl/vet-clinic/internal/repository"
 	"github.com/konnenl/vet-clinic/internal/validator"
+	"github.com/konnenl/vet-clinic/internal/auth"
+
 )
 
 type petHandler struct {
@@ -20,6 +22,13 @@ func newPetHandler(repo repository.PetRepository) *petHandler {
 
 // users.POST("/pet", h.user.createPetPost)
 func (h *petHandler) createPetPost(c echo.Context) error {
+	claims, err := auth.GetClaims(c)
+	if err != nil {
+		if httpErr, ok := err.(*echo.HTTPError); ok {
+			return httpErr
+		}
+		return echo.NewHTTPError(401, "Invalid authentication")
+	}
 	var r petRequest
 	if err := c.Bind(&r); err != nil {
 		return c.JSON(400, echo.Map{
@@ -49,7 +58,7 @@ func (h *petHandler) createPetPost(c echo.Context) error {
 		Color:   r.Color,
 		Weight:  r.Weight,
 	}
-	id, err := h.repo.Create(pet)
+	id, err := h.repo.Create(pet, uint(claims.UserId))
 	if err != nil {
 		return c.JSON(500, echo.Map{
 			"error": "Internal error",

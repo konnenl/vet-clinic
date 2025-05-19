@@ -11,6 +11,20 @@ type clientResponse struct {
 	Surname     string `json:"surname"`
 	Patronymic  string `json:"patronymic"`
 	Address     string `json:"address"`
+	Pets []petResponse `json:"pets"`
+}
+
+type petResponse struct {
+	ID uint `json:"id"`
+    Name             string    `json:"name"`
+    Gender           string      `json:"gender"` 
+    TypeID          uint      `json:"type_id"`
+    Type             string    `json:"type"`    
+    BreedID          uint      `json:"breed_id"`
+    Breed            string    `json:"breed"`  
+    RegistrationDate string `json:"registration_date"`
+    Color            string    `json:"color"`
+    Weight           uint      `json:"weight"`
 }
 
 func newClientResponse(c *model.Client) clientResponse {
@@ -21,6 +35,42 @@ func newClientResponse(c *model.Client) clientResponse {
 		Surname:     c.User.Surname,
 		Patronymic:  c.User.Patronymic,
 		Address:     c.Address,
+		Pets: nil,
+	}
+	return r
+}
+
+func newClientPetResponse(c *model.Client) clientResponse{
+	pets := make([]petResponse, len(c.Pets))
+	for j, pet := range c.Pets {
+		var g string
+		if pet.Gender == model.Female{
+			g = "ж"
+		}else{
+			g = "м"
+		}
+		petResponse := petResponse{
+            ID:              pet.ID,
+            Name:           pet.Name,
+            Gender:         g, 
+			BreedID:        pet.BreedID,
+            Breed:      pet.Breed.Name,  
+			TypeID:        pet.Breed.TypeID,
+            Type:       pet.Breed.Type.Name,
+            RegistrationDate: pet.RegistrationDate.Format("2006-01-02"),
+            Color:          pet.Color,
+            Weight:         pet.Weight,
+		}
+		pets[j] = petResponse
+	}
+	r := clientResponse{
+		Email:       c.User.Email,
+		PhoneNumber: c.User.PhoneNumber,
+		Name:        c.User.Name,
+		Surname:     c.User.Surname,
+		Patronymic:  c.User.Patronymic,
+		Address:     c.Address,
+		Pets: pets,
 	}
 	return r
 }

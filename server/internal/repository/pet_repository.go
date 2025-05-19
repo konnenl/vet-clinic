@@ -3,6 +3,7 @@ package repository
 import (
 	"github.com/konnenl/vet-clinic/internal/model"
 	"gorm.io/gorm"
+	"errors"
 )
 
 type petRepository struct {
@@ -13,9 +14,14 @@ func newPetRepository(db *gorm.DB) *petRepository {
 	return &petRepository{db: db}
 }
 
-func (r *petRepository) Create(pet *model.Pet) (uint, error) {
-	r.db.Model(&model.User{}).Association("Pet").Append()
-
+func (r *petRepository) Create(pet *model.Pet, id uint) (uint, error) {
+	var client model.Client
+	if err := r.db.Where("user_id = ?", id).First(&client).Error; err != nil{
+		return 0, errors.New("email already exist")
+	}
+	//TODO check breeds
+	
+	pet.ClientID = client.ID
 	if err := r.db.Create(&pet).Error; err != nil {
 		return 0, err
 	}
