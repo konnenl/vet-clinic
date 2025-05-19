@@ -12,13 +12,6 @@ header{
     z-index: 2;
 }
 
-header .logo{
-    font-family: "Kalnia", serif;
-    font-weight: 600;
-    font-size: 48px;
-    cursor: pointer;
-}
-
 header ul.nav{
     float: right;
     list-style: none;
