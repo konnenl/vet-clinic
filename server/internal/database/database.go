@@ -23,6 +23,8 @@ func New() (*gorm.DB, error) {
 func Migrate(db *gorm.DB) error {
 	err := db.AutoMigrate(
 		&model.User{},
+		&model.Service{},
+		&model.Category{},
 	)
 	return err
 }

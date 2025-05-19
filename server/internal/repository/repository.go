@@ -7,11 +7,13 @@ import (
 
 type Repository struct {
 	User UserRepository
+	Service ServiceRepository
 }
 
 func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{
 		User: newUserRepository(db),
+		Service: newServiceRepository(db),
 	}
 }
 
@@ -22,4 +24,8 @@ type UserRepository interface {
 	GetByEmail(email string) (*model.User, error)
 	Update(user *model.User) error
 	Deactivate(id uint) error
+}
+
+type ServiceRepository interface{
+	GetAll() ([]*model.Category, error)
 }
