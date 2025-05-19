@@ -41,7 +41,7 @@ func (h *Handler) InitRoutes(e *echo.Echo) {
 	users.DELETE("", h.user.unactiveUser)
 	users.POST("/pet", h.pet.createPetPost)
 	users.GET("/pet", h.pet.createPetGet)
-	//users.Put("/pet/:id", h.pet.updatePet)
+	users.PUT("/pet/:petId", h.pet.updatePet)
 	// users.DELETE("/pet", h.pet.unactivePet)
 
 	main := e.Group("main")

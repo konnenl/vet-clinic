@@ -27,19 +27,6 @@ type petResponse struct {
     Weight           uint      `json:"weight"`
 }
 
-func newClientResponse(c *model.Client) clientResponse {
-	r := clientResponse{
-		Email:       c.User.Email,
-		PhoneNumber: c.User.PhoneNumber,
-		Name:        c.User.Name,
-		Surname:     c.User.Surname,
-		Patronymic:  c.User.Patronymic,
-		Address:     c.Address,
-		Pets: nil,
-	}
-	return r
-}
-
 func newClientPetResponse(c *model.Client) clientResponse{
 	pets := make([]petResponse, len(c.Pets))
 	for j, pet := range c.Pets {

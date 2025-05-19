@@ -37,4 +37,5 @@ type PetRepository interface {
 	GetByID(id uint) (*model.Pet, error)
 	Update(pet *model.Pet) error
 	GetTypes() ([]*model.Type, error)
+	CheckPetOwnership(petID uint, clientID uint) (bool, error)
 }

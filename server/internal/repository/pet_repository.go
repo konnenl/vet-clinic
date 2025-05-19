@@ -17,7 +17,7 @@ func newPetRepository(db *gorm.DB) *petRepository {
 func (r *petRepository) Create(pet *model.Pet, id uint) (uint, error) {
 	var client model.Client
 	if err := r.db.Where("user_id = ?", id).First(&client).Error; err != nil{
-		return 0, errors.New("email already exist")
+		return 0, err
 	}
 	//TODO check breeds
 	
@@ -63,4 +63,22 @@ func (r *petRepository) GetTypes() ([]*model.Type, error) {
 		return nil, err
 	}
 	return types, nil
+}
+
+func (r *petRepository) CheckPetOwnership(petID uint, userID uint) (bool, error) {
+	var client model.Client
+	if err := r.db.Where("user_id = ?", userID).First(&client).Error; err != nil{
+		return false, err
+	}
+    var count int64
+    err := r.db.Model(&model.Pet{}).
+        Where("id = ? AND client_id = ?", petID, client.ID).
+        Count(&count).
+        Error
+
+    if err != nil {
+        return false, errors.New("failed to check pet ownership")
+    }
+
+    return count > 0, nil
 }
