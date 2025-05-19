@@ -9,3 +9,5 @@ services:
       - SERVER_PORT
     env_file:
       - .env
+    volumes:
+      - ./server/data:/app/data:rw

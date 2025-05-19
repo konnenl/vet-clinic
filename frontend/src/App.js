@@ -11,6 +11,7 @@ function App() {
       <Catalogue />
       <Footer/>
     </div>
+
   );
 }
 
