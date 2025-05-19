@@ -1,0 +1,13 @@
+services:
+  backend:
+    container_name: "vet-clinic-backend"
+    build: ./server
+    ports:
+      - "${SERVER_PORT}:${SERVER_PORT}"
+    environment:
+      - JWT_SECRET_KEY
+      - SERVER_PORT
+    env_file:
+      - .env
+    volumes:
+      - ./server/data:/app/data:rw

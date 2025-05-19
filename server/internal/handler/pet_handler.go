@@ -1,18 +1,12 @@
 package handler
 
 import (
-	"errors"
 	"github.com/labstack/echo/v4"
-	"gorm.io/gorm"
-	"net/http"
-	"strings"
-	"gorm.io/datatypes"
 
 	"github.com/konnenl/vet-clinic/internal/model"
 	"github.com/konnenl/vet-clinic/internal/repository"
 	"github.com/konnenl/vet-clinic/internal/validator"
 )
-
 
 type petHandler struct {
 	repo repository.PetRepository
@@ -24,8 +18,8 @@ func newPetHandler(repo repository.PetRepository) *petHandler {
 	}
 }
 
-// users.POST("/pet", h.user.createPet)
-func (h *authHandler) createPet(c echo.Context) error {
+// users.POST("/pet", h.user.createPetPost)
+func (h *petHandler) createPetPost(c echo.Context) error {
 	var r petRequest
 	if err := c.Bind(&r); err != nil {
 		return c.JSON(400, echo.Map{
@@ -42,26 +36,18 @@ func (h *authHandler) createPet(c echo.Context) error {
 
 	//TODO вынести в func bind request
 	var gender model.Gender
-	if r.Gender == "ж"{
+	if r.Gender == "ж" {
 		gender = model.Female
-	}else{
+	} else {
 		gender = model.Male
 	}
 
-	notes, err := json.Marshal(r.Notes)
-	if err != nil{
-		return c.JSON(500, echo.Map{
-			"error": "Internal error",
-		})
-	}
-
 	pet := &model.Pet{
-		Name:     r.Name,
+		Name:    r.Name,
 		Gender:  gender,
-		BreedID: r.Breed,
-		Color: r.Color,
-		Weight: r.Weight,
-		Notes: datatypes.JSON(notes)
+		BreedID: uint(r.BreedID),
+		Color:   r.Color,
+		Weight:  r.Weight,
 	}
 	id, err := h.repo.Create(pet)
 	if err != nil {
@@ -74,5 +60,19 @@ func (h *authHandler) createPet(c echo.Context) error {
 	})
 }
 
+// users.GET("/pet", h.user.createPetGet)
+func (h *petHandler) createPetGet(c echo.Context) error {
+	//types, breed
+	t, err := h.repo.GetTypes()
+	if err != nil{
+		return c.JSON(500, echo.Map{
+			"error": "Internal error",
+		})
+	}
+	typ := newTypeBreedResponse(t)
+	return c.JSON(200, echo.Map{
+		"types": typ,
+	})
+}
 // users.Put("/pet", h.user.updatePet)
 // users.DELETE("/pet", h.user.unactivePet)

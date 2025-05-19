@@ -26,6 +26,8 @@ func Migrate(db *gorm.DB) error {
 		&model.Type{},
 		&model.Breed{},
 		&model.Pet{},
+		&model.Service{},
+		&model.Category{},
 	)
 	return err
 }

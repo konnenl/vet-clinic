@@ -3,13 +3,13 @@ package model
 import (
 	"gorm.io/gorm"
 	"time"
-	"gorm.io/datatypes"
 )
 
 type Gender rune
-const(
+
+const (
 	Female Gender = 'ж'
-	Male Gender = 'м'
+	Male   Gender = 'м'
 )
 
 type Pet struct {
@@ -21,17 +21,16 @@ type Pet struct {
 	RegistrationDate time.Time `gorm:"default:CURRENT_TIMESTAMP"`
 	Color            string
 	Weight           uint
-	Notes            datatypes.JSON `gorm:"type:json"`
 }
 
 type Type struct {
 	gorm.Model
 	Name string `gorm:"not null"`
+	Breeds []Breed `gorm:"foreignKey:TypeID"`
 }
 
 type Breed struct {
 	gorm.Model
 	Name   string `gorm:"not null"`
 	TypeID uint   `gorm"not null"`
-	Type   Type   `gorm:"foreignKey:TypeID"`
 }

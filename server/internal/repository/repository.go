@@ -6,14 +6,16 @@ import (
 )
 
 type Repository struct {
-	User UserRepository
-	Pet PetRepository
+	User    UserRepository
+	Pet     PetRepository
+	Service ServiceRepository
 }
 
 func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{
-		User: newUserRepository(db),
-		Pet: newPetRepository(db),
+		User:    newUserRepository(db),
+		Pet:     newPetRepository(db),
+		Service: newServiceRepository(db),
 	}
 }
 
@@ -26,11 +28,13 @@ type UserRepository interface {
 	Deactivate(id uint) error
 }
 
-type UserRepository interface {
-	Create(user *model.User) (uint, error)
-	Authenticate(email string, password string) (*model.User, error)
-	GetByID(id uint) (*model.User, error)
-	GetByEmail(email string) (*model.User, error)
-	Update(user *model.User) error
-	Deactivate(id uint) error
+type ServiceRepository interface {
+	GetAll() ([]*model.Category, error)
+}
+
+type PetRepository interface {
+	Create(pet *model.Pet) (uint, error)
+	GetByID(id uint) (*model.Pet, error)
+	Update(pet *model.Pet) error
+	GetTypes() ([]*model.Type, error)
 }

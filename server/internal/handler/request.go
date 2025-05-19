@@ -20,11 +20,10 @@ type userLoginRequest struct {
 	Password string `json:"password" validate:"required,min=8"`
 }
 
-type petRequest struct{
-	Name             string `json:"name" validate:"required"`
-	Gender           string `json:"gender" validate:"required,gender"`
-	Breed            int `json:"breed" validate:"required"`
-	Color            string `json:"color" validate:"required"`
-	Weight           uint `json:"weight" validate:"required,gt=0"`
-	Notes          []string `json:"note" validate:"dive"`
+type petRequest struct {
+	Name   string `json:"name" validate:"required"`
+	Gender string `json:"gender" validate:"required,gender"`
+	BreedID  int    `json:"breed_id" validate:"required"`
+	Color  string `json:"color" validate:"required"`
+	Weight uint   `json:"weight" validate:"required,gt=0"`
 }

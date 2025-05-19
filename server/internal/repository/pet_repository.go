@@ -48,3 +48,11 @@ func (r *petRepository) Deactivate(id uint) error {
 	}
 	return nil
 }
+
+func (r *petRepository) GetTypes() ([]*model.Type, error) {
+	var types []*model.Type
+	if err := r.db.Model(&model.Type{}).Preload("Breeds").Find(&types).Error; err != nil {
+		return nil, err
+	}
+	return types, nil
+}
