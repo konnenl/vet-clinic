@@ -1,10 +1,10 @@
 package repository
 
 import (
-	"errors"
-	"github.com/konnenl/vet-clinic/internal/model"
 	"gorm.io/gorm"
+	"errors"
 	"strings"
+	"github.com/konnenl/vet-clinic/internal/model"
 )
 
 type userRepository struct {

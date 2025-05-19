@@ -22,3 +22,36 @@ func newUserResponse(u *model.User) userResponse {
 	}
 	return r
 }
+
+type serviceResponse struct {
+	ID uint `json:"id"`
+	Name string `json:"name"`
+	Price float64 `json:"price"`
+}
+
+type categoryResponse struct {
+	Name string `json:"name"`
+	Services []serviceResponse `json:"services"`
+}
+
+func newCategoryServicesResponse(c []*model.Category) []categoryResponse{
+	categories := make([]categoryResponse, len(c))
+	for i, category := range c{
+		services := make([]serviceResponse, len(category.Services))
+		for j, service := range category.Services{
+			serviceResponse := serviceResponse{
+				ID: service.ID,
+				Name: service.Name, 
+				Price: service.Price,
+			}
+			services[j] = serviceResponse
+		}
+		categoryResponse := categoryResponse{
+			Name: category.Name, 
+			Services: services,
+		}
+		categories[i] = categoryResponse
+	}
+
+	return categories
+}
