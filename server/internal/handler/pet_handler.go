@@ -64,7 +64,7 @@ func (h *petHandler) createPetPost(c echo.Context) error {
 func (h *petHandler) createPetGet(c echo.Context) error {
 	//types, breed
 	t, err := h.repo.GetTypes()
-	if err != nil{
+	if err != nil {
 		return c.JSON(500, echo.Map{
 			"error": "Internal error",
 		})
@@ -74,5 +74,6 @@ func (h *petHandler) createPetGet(c echo.Context) error {
 		"types": typ,
 	})
 }
+
 // users.Put("/pet", h.user.updatePet)
 // users.DELETE("/pet", h.user.unactivePet)

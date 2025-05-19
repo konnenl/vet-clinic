@@ -21,11 +21,12 @@ type Pet struct {
 	RegistrationDate time.Time `gorm:"default:CURRENT_TIMESTAMP"`
 	Color            string
 	Weight           uint
+	ClientID           uint
 }
 
 type Type struct {
 	gorm.Model
-	Name string `gorm:"not null"`
+	Name   string  `gorm:"not null"`
 	Breeds []Breed `gorm:"foreignKey:TypeID"`
 }
 

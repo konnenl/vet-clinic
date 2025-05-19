@@ -22,6 +22,9 @@ func (r *userRepository) Create(user *model.User) (uint, error) {
 		}
 		return 0, err
 	}
+	if err := r.db.Create(&model.Client{}).Error; err != nil {
+		return 0, err
+	}
 	return user.ID, nil
 }
 
@@ -39,12 +42,12 @@ func (r *userRepository) Authenticate(email string, password string) (*model.Use
 	return user, nil
 }
 
-func (r *userRepository) GetByID(id uint) (*model.User, error) {
-	var user model.User
-	if err := r.db.First(&user, id).Error; err != nil {
+func (r *userRepository) GetByID(id uint) (*model.Client, error) {
+	var client model.Client
+	if err := r.db.Preload("User").Where("user_id = ?", id).First(&client).Error; err != nil {
 		return nil, err
 	}
-	return &user, nil
+	return &client, nil
 }
 
 func (r *userRepository) GetByEmail(email string) (*model.User, error) {
@@ -55,14 +58,26 @@ func (r *userRepository) GetByEmail(email string) (*model.User, error) {
 	return &user, nil
 }
 
-func (r *userRepository) Update(user *model.User) error {
-	if err := r.db.Save(&user).Error; err != nil {
-		if strings.Contains(err.Error(), "UNIQUE constraint failed: users.email") {
-			return errors.New("email already exist")
+func (r *userRepository) Update(user *model.User, client *model.Client) error {
+	return r.db.Transaction(func(tx *gorm.DB) error {
+		if user.Email != "" {
+			var existing model.User
+			if err := tx.Where("email = ? AND id != ?", user.Email, user.ID).First(&existing).Error; err == nil {
+				return errors.New("email already exists")
+			} else if !errors.Is(err, gorm.ErrRecordNotFound) {
+				return err
+			}
 		}
-		return err
-	}
-	return nil
+		if err := tx.Save(user).Error; err != nil {
+			return err
+		}
+		if client != nil {
+			if err := tx.Save(client).Error; err != nil {
+				return err
+			}
+		}
+		return nil
+	})
 }
 
 func (r *userRepository) Deactivate(id uint) error {

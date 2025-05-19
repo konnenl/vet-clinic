@@ -21,6 +21,14 @@ type User struct {
 	IsActive    bool   `gorm:"default:true"`
 }
 
+type Client struct {
+	gorm.Model
+	Address string
+	UserID  uint  `gorm:"unique;not null"`
+	User    User  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Pets    []Pet `gorm:"foreignKey:ClientID"`
+}
+
 func HashPassword(password string) (string, error) {
 	if len(password) == 0 {
 		return "", errors.New("password should not be empty")

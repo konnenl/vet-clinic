@@ -49,6 +49,7 @@ func (h *authHandler) signUp(c echo.Context) error {
 			"error": "Bad request",
 		})
 	}
+	//TODO add roles
 	user := &model.User{
 		Name:     r.Name,
 		Surname:  r.Surname,
@@ -56,6 +57,7 @@ func (h *authHandler) signUp(c echo.Context) error {
 		Password: hashedPassword,
 		Role:     "user",
 	}
+	//TODO add flag for role
 	id, err := h.repo.Create(user)
 	if err != nil {
 		if strings.Contains(err.Error(), "email already exist") {

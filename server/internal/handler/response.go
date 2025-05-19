@@ -4,21 +4,23 @@ import (
 	"github.com/konnenl/vet-clinic/internal/model"
 )
 
-type userResponse struct {
+type clientResponse struct {
 	Email       string `json:"email"`
 	PhoneNumber string `json:"phone_number"`
 	Name        string `json:"name"`
 	Surname     string `json:"surname"`
 	Patronymic  string `json:"patronymic"`
+	Address     string `json:"address"`
 }
 
-func newUserResponse(u *model.User) userResponse {
-	r := userResponse{
-		Email:       u.Email,
-		PhoneNumber: u.PhoneNumber,
-		Name:        u.Name,
-		Surname:     u.Surname,
-		Patronymic:  u.Patronymic,
+func newClientResponse(c *model.Client) clientResponse {
+	r := clientResponse{
+		Email:       c.User.Email,
+		PhoneNumber: c.User.PhoneNumber,
+		Name:        c.User.Name,
+		Surname:     c.User.Surname,
+		Patronymic:  c.User.Patronymic,
+		Address:     c.Address,
 	}
 	return r
 }
@@ -56,13 +58,13 @@ func newCategoryServicesResponse(c []*model.Category) []categoryResponse {
 	return categories
 }
 
-type typeResponse struct{
-	Name string `json:"name"`
+type typeResponse struct {
+	Name   string          `json:"name"`
 	Breeds []breedResponse `json:"breeds"`
-} 
+}
 
-type breedResponse struct{
-	ID uint `json"id"`
+type breedResponse struct {
+	ID   uint   `json"id"`
 	Name string `json:"name"`
 }
 
@@ -72,13 +74,13 @@ func newTypeBreedResponse(t []*model.Type) []typeResponse {
 		breeds := make([]breedResponse, len(typ.Breeds))
 		for j, breed := range typ.Breeds {
 			breedResponse := breedResponse{
-				ID:    breed.ID,
-				Name:  breed.Name,
+				ID:   breed.ID,
+				Name: breed.Name,
 			}
 			breeds[j] = breedResponse
 		}
 		typeResponse := typeResponse{
-			Name:     typ.Name,
+			Name:   typ.Name,
 			Breeds: breeds,
 		}
 		types[i] = typeResponse

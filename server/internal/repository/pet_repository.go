@@ -14,6 +14,8 @@ func newPetRepository(db *gorm.DB) *petRepository {
 }
 
 func (r *petRepository) Create(pet *model.Pet) (uint, error) {
+	r.db.Model(&model.User{}).Association("Pet").Append()
+
 	if err := r.db.Create(&pet).Error; err != nil {
 		return 0, err
 	}

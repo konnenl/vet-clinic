@@ -22,9 +22,9 @@ func NewRepository(db *gorm.DB) *Repository {
 type UserRepository interface {
 	Create(user *model.User) (uint, error)
 	Authenticate(email string, password string) (*model.User, error)
-	GetByID(id uint) (*model.User, error)
+	GetByID(id uint) (*model.Client, error)
 	GetByEmail(email string) (*model.User, error)
-	Update(user *model.User) error
+	Update(user *model.User, client *model.Client) error
 	Deactivate(id uint) error
 }
 
