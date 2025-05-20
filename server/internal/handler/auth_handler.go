@@ -77,17 +77,9 @@ func (h *authHandler) signUp(c echo.Context) error {
 		})
 	}
 
-	c.SetCookie(&http.Cookie{
-		Name:     "token",
-		Value:    token,
-		HttpOnly: true,
-		Path:     "/",
-		MaxAge:   h.authService.Expires,
-		//Secure:   true,
-	})
-
 	return c.JSON(201, echo.Map{
 		"id": id,
+		"token": token,
 	})
 }
 
@@ -118,31 +110,13 @@ func (h *authHandler) signIn(c echo.Context) error {
 			"error": "Internal error",
 		})
 	}
-
-	c.SetCookie(&http.Cookie{
-		Name:     "token",
-		Value:    token,
-		HttpOnly: true,
-		Path:     "/",
-		MaxAge:   h.authService.Expires,
-		//Secure:   true,
-	})
-
 	return c.JSON(200, echo.Map{
 		"id": user.ID,
+		"token": token,
 	})
 }
 
 func (h *authHandler) logout(c echo.Context) error {
-	c.SetCookie(&http.Cookie{
-		Name:     "token",
-		Value:    "",
-		HttpOnly: true,
-		Path:     "/",
-		MaxAge:   -1,
-		//Secure:   true,
-	})
-
 	//TODO token blacklist
 	return c.JSON(200, echo.Map{
 		"message": "Successfully logged out",

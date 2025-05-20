@@ -22,15 +22,12 @@ func (r *userRepository) Create(user *model.User) (uint, error) {
 		}
 		return 0, err
 	}
-<<<<<<< HEAD
-=======
 	client := &model.Client{
 		UserID: user.ID, 
 	}
 	if err := r.db.Create(client).Error; err != nil {
 		return 0, err
 	}
->>>>>>> 7fe4d561e2ccf0f17c1d3c20160f6e548c8b7abb
 	return user.ID, nil
 }
 

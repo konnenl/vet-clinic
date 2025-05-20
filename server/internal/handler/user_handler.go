@@ -127,14 +127,7 @@ func (h *userHandler) unactiveUser(c echo.Context) error {
 		})
 	}
 
-	c.SetCookie(&http.Cookie{
-		Name:     "token",
-		Value:    "",
-		HttpOnly: true,
-		Path:     "/",
-		MaxAge:   -1,
-		//Secure:   true,
-	})
+	//TODO token black list
 
 	return c.JSON(http.StatusOK, echo.Map{
 		"message": "User deactivated successfully",

@@ -6,24 +6,16 @@ import (
 )
 
 type Repository struct {
-<<<<<<< HEAD
-	User UserRepository
-=======
 	User    UserRepository
 	Pet     PetRepository
 	Service ServiceRepository
->>>>>>> 7fe4d561e2ccf0f17c1d3c20160f6e548c8b7abb
 }
 
 func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{
-<<<<<<< HEAD
-		User: newUserRepository(db),
-=======
 		User:    newUserRepository(db),
 		Pet:     newPetRepository(db),
 		Service: newServiceRepository(db),
->>>>>>> 7fe4d561e2ccf0f17c1d3c20160f6e548c8b7abb
 	}
 }
 
