@@ -39,10 +39,10 @@ func main() {
 		Format: `${time_rfc3339} | ${method} | ${uri} | ${status} | ${latency_human} | ${error}` + "\n",
 	}))
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-        AllowOrigins: []string{"http://localhost:3000"},
-        AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
-        AllowHeaders: []string{echo.HeaderAuthorization, echo.HeaderContentType},
-    }))
+		AllowOrigins: []string{"http://localhost:3000"},
+		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
+		AllowHeaders: []string{echo.HeaderAuthorization, echo.HeaderContentType},
+	}))
 	e.Validator = validator.New()
 
 	repos := repository.NewRepository(db)
@@ -50,7 +50,6 @@ func main() {
 	handlers := handler.NewHandler(repos, authService)
 
 	port := ":" + cfg.ServerPort
-
 	handlers.InitRoutes(e)
 	e.Logger.Fatal(e.Start(port))
 }

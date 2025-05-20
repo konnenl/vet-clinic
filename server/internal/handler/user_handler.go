@@ -33,7 +33,7 @@ func (h *userHandler) getProfile(c echo.Context) error {
 		return echo.NewHTTPError(401, "Invalid authentication")
 	}
 
-	user, err := h.repo.GetByID(uint(claims.UserId))
+	client, err := h.repo.GetByID(uint(claims.UserId))
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return c.JSON(404, echo.Map{
@@ -44,7 +44,7 @@ func (h *userHandler) getProfile(c echo.Context) error {
 			"error": "Internal error",
 		})
 	}
-	u := newUserResponse(user)
+	u := newClientPetResponse(client)
 	return c.JSON(200, u)
 }
 
@@ -81,8 +81,12 @@ func (h *userHandler) updateUser(c echo.Context) error {
 		Email:       r.Email,
 		PhoneNumber: r.PhoneNumber,
 	}
+	client := &model.Client{
+		UserID:  uint(claims.UserId),
+		Address: r.Address,
+	}
 
-	if err := h.repo.Update(user); err != nil {
+	if err := h.repo.Update(user, client); err != nil {
 		if strings.Contains(err.Error(), "email already exist") {
 			return c.JSON(409, echo.Map{
 				"error": "Email already in use",

@@ -6,13 +6,13 @@ import (
 
 type Service struct {
 	gorm.Model
-	Name string
-	Price float64
+	Name       string  `gorm:"not null"`
+	Price      float64 `gorm:"not null"`
 	CategoryID uint
 }
 
 type Category struct {
 	gorm.Model
-	Name string
+	Name     string    `gorm:"not null"`
 	Services []Service `gorm:"foreignKey:CategoryID"`
 }

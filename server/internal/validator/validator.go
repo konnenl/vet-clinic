@@ -13,6 +13,7 @@ type CustomValidator struct {
 func New() *CustomValidator {
 	v := validator.New()
 	_ = v.RegisterValidation("phone", validatePhoneNumber)
+	_ = v.RegisterValidation("gender", validateGender)
 	return &CustomValidator{Validator: v}
 
 }
@@ -27,6 +28,12 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 func validatePhoneNumber(field validator.FieldLevel) bool {
 	phoneNumber := field.Field().String()
 	match, _ := regexp.MatchString(`^(\+7|8)\d{10}$`, phoneNumber)
+	return match
+}
+
+func validateGender(field validator.FieldLevel) bool {
+	gender := field.Field().String()
+	match, _ := regexp.MatchString(`(ж|м)`, gender)
 	return match
 }
 
