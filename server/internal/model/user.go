@@ -7,6 +7,7 @@ import (
 	_ "regexp"
 )
 
+//TODO role enum
 type User struct {
 	gorm.Model
 	Email       string `gorm:"unique;not null"`
@@ -17,6 +18,14 @@ type User struct {
 	Patronymic  string
 	Role        string `gorm:"type:text"`
 	IsActive    bool   `gorm:"default:true"`
+}
+
+type Client struct {
+	gorm.Model
+	Address string
+	UserID  uint  `gorm:"unique;not null"`
+	User    User  `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Pets    []Pet `gorm:"foreignKey:ClientID"`
 }
 
 func HashPassword(password string) (string, error) {
