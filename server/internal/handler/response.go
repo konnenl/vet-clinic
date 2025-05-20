@@ -10,6 +10,7 @@ type clientResponse struct {
 	Name        string `json:"name"`
 	Surname     string `json:"surname"`
 	Patronymic  string `json:"patronymic"`
+
 	Address     string `json:"address"`
 	Pets []petResponse `json:"pets"`
 }

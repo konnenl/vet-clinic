@@ -46,7 +46,7 @@ func main() {
 	e.Validator = validator.New()
 
 	repos := repository.NewRepository(db)
-	authService := auth.New(cfg.JWTSecretKey, 24*60)
+	authService := auth.New(cfg.JWTSecretKey, 15*60)
 	handlers := handler.NewHandler(repos, authService)
 
 	port := ":" + cfg.ServerPort
