@@ -107,7 +107,7 @@ func (h *userHandler) updateUser(c echo.Context) error {
 }
 
 // DELETE("/profile", unactiveUser)
-func (h *userHandler) unactiveUser(c echo.Context) error {
+func (h *userHandler) deactivateUser(c echo.Context) error {
 	claims, err := auth.GetClaims(c)
 	if err != nil {
 		if httpErr, ok := err.(*echo.HTTPError); ok {

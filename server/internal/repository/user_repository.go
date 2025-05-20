@@ -23,7 +23,7 @@ func (r *userRepository) Create(user *model.User) (uint, error) {
 		return 0, err
 	}
 	client := &model.Client{
-		UserID: user.ID, 
+		UserID: user.ID,
 	}
 	if err := r.db.Create(client).Error; err != nil {
 		return 0, err
@@ -45,10 +45,9 @@ func (r *userRepository) Authenticate(email string, password string) (*model.Use
 	return user, nil
 }
 
-//TODO check is active
 func (r *userRepository) GetByID(id uint) (*model.Client, error) {
 	var client model.Client
-	if err := r.db.Preload("User").Preload("Pets").Where("user_id = ?", id).First(&client).Error; err != nil {
+	if err := r.db.Preload("User").Preload("Pets", "is_active = ?", true).Where("user_id = ?", id).First(&client).Error; err != nil {
 		return nil, err
 	}
 	return &client, nil
