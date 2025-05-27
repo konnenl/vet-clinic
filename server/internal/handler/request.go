@@ -20,6 +20,7 @@ type userLoginRequest struct {
 	Email    string `json:"email" validate:"required"`
 	Password string `json:"password" validate:"required,min=8"`
 }
+
 type petRequest struct {
 	Name    string `json:"name" validate:"required"`
 	Gender  string `json:"gender" validate:"required,gender"`
