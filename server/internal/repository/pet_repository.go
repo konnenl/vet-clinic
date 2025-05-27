@@ -19,8 +19,6 @@ func (r *petRepository) Create(pet *model.Pet, id uint) (uint, error) {
 	if err := r.db.Where("user_id = ?", id).First(&client).Error; err != nil {
 		return 0, err
 	}
-	//TODO check breeds
-
 	pet.ClientID = client.ID
 	if err := r.db.Create(&pet).Error; err != nil {
 		return 0, err

@@ -86,7 +86,7 @@ func (h *petHandler) createPetGet(c echo.Context) error {
 	})
 }
 
-// users.Put("/pet", h.user.updatePet)
+// users.Put("/pet/:petID", h.user.updatePet)
 func (h *petHandler) updatePet(c echo.Context) error {
 	claims, err := auth.GetClaims(c)
 	if err != nil {
