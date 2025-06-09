@@ -4,8 +4,8 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
-	"time"
 	"strings"
+	"time"
 )
 
 type JWTService struct {
@@ -43,17 +43,24 @@ func (s *JWTService) Middleware() echo.MiddlewareFunc {
 	return echojwt.WithConfig(echojwt.Config{
 		SigningKey:    s.SecretKey,
 		SigningMethod: "HS256",
-		TokenLookup:   "headred:Authorization",
+		TokenLookup:   "header:Authorization",
 		ContextKey:    "user",
 		NewClaimsFunc: func(c echo.Context) jwt.Claims {
 			return &Claims{}
 		},
-		ParseTokenFunc: func(c echo.Context, auth string) (interface{}, error){
+		ParseTokenFunc: func(c echo.Context, auth string) (interface{}, error) {
 			parts := strings.Split(auth, " ")
 			if len(parts) != 2 || parts[0] != "Bearer" {
 				return nil, echo.NewHTTPError(401, "Invalid authorization header format")
 			}
-			return parts[1], nil
+			token, err := jwt.ParseWithClaims(parts[1], &Claims{}, func(token *jwt.Token) (interface{}, error) {
+				return s.SecretKey, nil
+			})
+			if err != nil {
+				return nil, echo.NewHTTPError(401, "Invalid token")
+			}
+
+			return token, nil
 		},
 		ErrorHandler: func(c echo.Context, err error) error {
 			return c.JSON(401, echo.Map{

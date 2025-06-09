@@ -1,5 +1,9 @@
 package handler
 
+import (
+	"time"
+)
+
 type userRegisterRequest struct {
 	Name     string `json:"name" validate:"required"`
 	Surname  string `json:"surname" validate:"required"`
@@ -27,4 +31,13 @@ type petRequest struct {
 	BreedID int    `json:"breed_id" validate:"required"`
 	Color   string `json:"color" validate:"required"`
 	Weight  uint   `json:"weight" validate:"required,gt=0"`
+}
+
+type visitRequest struct {
+	PetID    uint      `json:"pet_id"`
+	DateTime time.Time `json:"datetime"`
+	Type     string    `json:"type"`
+	Services []struct {
+		ID uint `json:"id"`
+	} `json:"services"`
 }

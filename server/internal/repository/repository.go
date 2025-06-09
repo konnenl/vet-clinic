@@ -9,6 +9,7 @@ type Repository struct {
 	User    UserRepository
 	Pet     PetRepository
 	Service ServiceRepository
+	Visit   VisitRepository
 }
 
 func NewRepository(db *gorm.DB) *Repository {
@@ -16,6 +17,7 @@ func NewRepository(db *gorm.DB) *Repository {
 		User:    newUserRepository(db),
 		Pet:     newPetRepository(db),
 		Service: newServiceRepository(db),
+		Visit:   newVisitRepository(db),
 	}
 }
 
@@ -39,4 +41,10 @@ type PetRepository interface {
 	GetTypes() ([]*model.Type, error)
 	CheckPetOwnership(petID uint, clientID uint) (bool, error)
 	Deactivate(petID uint) error
+	GetAllByUserID(id uint) ([]model.Pet, error)
+}
+
+type VisitRepository interface {
+	Create(visit *model.Visit) (uint, error)
+	GetAll(userID uint) ([]model.Pet, error)
 }

@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"github.com/joho/godotenv"
 	"os"
 )
 
@@ -11,6 +12,10 @@ type Config struct {
 }
 
 func LoadConfig() (*Config, error) {
+	err := godotenv.Load("../.env")
+	if err != nil {
+		return nil, err
+	}
 	jwtSecret := getEnv("JWT_SECRET_KEY", "")
 	if jwtSecret == "" {
 		return nil, fmt.Errorf("JWT_SECRET_KEY must be set in env")
