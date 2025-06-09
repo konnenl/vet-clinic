@@ -17,7 +17,18 @@
    cd frontend
    npm install
    ```
+### Запуск
 
+**Фронтенд:**
+```bash
+cd frontend
+npm run start
+```
+
+**Бэкенд:**
+```bash
+docker-compose up --build
+```
 
 
 
@@ -100,7 +111,7 @@ vet-clinic/
 │   ├── go.sum                 # Контрольные суммы  
 │   └──  .gitignore             # Исключения для Git  
 │   
-├── README.md                # README
+├── README.md                # README  
 ├── .gitignore               # Глобальные исключения  
 └── docker-compose.yml       # Настройка контейнеров  
 
