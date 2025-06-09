@@ -11,30 +11,38 @@ export default function SignUpPage() {
 
     const router = useNavigate();
 
-    const handleSubmit = async (e) =>{
-        e.preventDefault();
-        setError('')
-        setLoading(true);
-        try{
-            const response = await fetch('http://localhost:8080/auth/signup',{
-                method: 'POST',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body: JSON.stringify({name, surname, email, password})
-            })
-            const data = await response.json();
-            console.log(response)
-            console.log(data)
-            console.log(data.token)
-             if (!response.ok){
-                throw new Error(data.message || 'Аутентификация провалена');
-            }
-            router.push('/');
-        }catch(error){
-            setError(error);
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('')
+    setLoading(true);
+    try {
+        const response = await fetch('http://localhost:8080/auth/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',  
+            },
+            body: JSON.stringify({ name, surname, email, password })
+        })
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error || 'Аутентификация провалена');
         }
+        
+        // Здесь data.token должен быть доступен
+        console.log("ID:", data.id);
+        console.log("Token:", data.token);
+        
+        // Сохраните токен в localStorage или куках
+        localStorage.setItem('token', data.token);
+        
+        router.push('/');
+    } catch (error) {
+        setError(error.message);
+    } finally {
+        setLoading(false);
     }
+}
   return (
     <div>
         <form onSubmit={handleSubmit}>
