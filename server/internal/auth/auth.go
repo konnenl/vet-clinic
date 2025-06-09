@@ -5,6 +5,7 @@ import (
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
 	"time"
+	"strings"
 )
 
 type JWTService struct {
@@ -78,6 +79,9 @@ func GetClaims(c echo.Context) (*Claims, error) {
 	claims, ok := token.Claims.(*Claims)
 	if !ok {
 		return nil, echo.NewHTTPError(401, "invalid claims")
+	}
+	if claims.ExpiresAt != nil && claims.ExpiresAt.Time.Before(time.Now()) {
+		return nil, echo.NewHTTPError(401, "token expired")
 	}
 	return claims, nil
 }
