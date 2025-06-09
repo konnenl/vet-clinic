@@ -38,7 +38,7 @@
 
 ## Структура проекта
 
-project-root/  
+vet-clinic/  
 │  
 ├── frontend/                  # Фронтенд (React)  
 │   ├── public/                # Статические файлы  
