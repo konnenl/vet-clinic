@@ -8,29 +8,33 @@ export default function SignInPage() {
   const [password, setPassword] = useState('')
   const { login } = useContext(AuthContext);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const router = useNavigate();
 
-  const handleSubmit = async (e) =>{
+  const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
-
-        try{
-            const response =  await fetch('http://localhost:8080/auth/signin',{
+        setError('')
+        setLoading(true);
+        try {
+            const response = await fetch('http://localhost:8080/auth/signin', {
                 method: 'POST',
-                headers:{
-                    'Content-Type': 'application/json',
+                headers: {
+                    'Content-Type': 'application/json',  
                 },
-                body: JSON.stringify({email, password}),
+                credentials: 'include',
+                body: JSON.stringify({ email, password })
             })
             const data = await response.json();
-            console.log(data )
-            if (!response.ok){
-                throw new Error(data.message);
-            }
-            navigate.push('/');
-        }catch(error){
+            console.log(data)
+            if (!response.ok) {
+                throw new Error(data.error || 'Аутентификация провалена');
+            }    
+            router.push('/');
+            login(data)
+        } catch (error) {
             setError(error.message);
-            console.error(error)
+        } finally {
+            setLoading(false);
         }
     }
 

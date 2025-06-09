@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../components/AuthContext';
 
 export default function SignUpPage() {
     const [name, setName] = useState('');
@@ -8,41 +9,36 @@ export default function SignUpPage() {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const[error, setError] = useState('')
+    const {login} = useContext(AuthContext);
 
-    const router = useNavigate();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('')
-    setLoading(true);
-    try {
-        const response = await fetch('http://localhost:8080/auth/signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',  
-            },
-            body: JSON.stringify({ name, surname, email, password })
-        })
-        const data = await response.json();
-        
-        if (!response.ok) {
-            throw new Error(data.error || 'Аутентификация провалена');
+        e.preventDefault();
+        setError('')
+        setLoading(true);
+        try {
+            const response = await fetch('http://localhost:8080/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',  
+                },
+                credentials: 'include',
+                body: JSON.stringify({ name, surname, email, password })
+            })
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.error || 'Аутентификация провалена');
+            }
+            navigate('/');
+            login(data)
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
         }
-        
-        // Здесь data.token должен быть доступен
-        console.log("ID:", data.id);
-        console.log("Token:", data.token);
-        
-        // Сохраните токен в localStorage или куках
-        localStorage.setItem('token', data.token);
-        
-        router.push('/');
-    } catch (error) {
-        setError(error.message);
-    } finally {
-        setLoading(false);
     }
-}
   return (
     <div>
         <form onSubmit={handleSubmit}>

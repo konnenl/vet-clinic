@@ -8,10 +8,12 @@ import SignUpPage from "./pages/AuthPage/SignUp";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthContext, AuthProvider } from "./components/AuthContext";
 import { useContext } from 'react';
+import ProfilePage from "./pages/Profile/Profile";
 
 // Компонент-обёртка для защищённых маршрутов
 const ProtectedRoute = ({ children }) => {
   const { isAuth } = useContext(AuthContext);
+  console.log(isAuth)
   return isAuth ? children : <Navigate to="/auth" replace />;
 };
 
@@ -38,6 +40,12 @@ export default function App() {
               <Cart />
             </ProtectedRoute>
           } />
+
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }/>
         </Routes>
         <Footer />
       </Router>
