@@ -1,3 +1,12 @@
+## Начало работы
+### Backend
+```
+docker-compose up
+```
+### frontend
+```
+npm run start
+```
 ## Процесс разработки
 ### Issues
 Распределение задач было организовано с помощью issues в github  
@@ -81,6 +90,7 @@ vet-clinic/
 ## Используемые технологии
 ### Frontend
 - React
+- React-router-dom
   
 ### Backend
 - Язык программирования Go
