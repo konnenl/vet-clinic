@@ -46,4 +46,5 @@ type PetRepository interface {
 
 type VisitRepository interface {
 	Create(visit *model.Visit) (uint, error)
+	GetAll(userID uint) ([]model.Pet, error)
 }

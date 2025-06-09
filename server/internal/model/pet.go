@@ -23,7 +23,7 @@ type Pet struct {
 	Weight           uint
 	IsActive         bool `gorm:"default:true"`
 	ClientID         uint
-	Visists          []Visit `gorm:"foreignKey:PetID"`
+	Visits           []Visit `gorm:"foreignKey:PetID"`
 }
 
 type Type struct {

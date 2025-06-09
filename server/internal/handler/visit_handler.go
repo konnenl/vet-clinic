@@ -5,7 +5,7 @@ import (
 	_ "gorm.io/gorm"
 	"net/http"
 
-	_ "github.com/konnenl/vet-clinic/internal/auth"
+	"github.com/konnenl/vet-clinic/internal/auth"
 	"github.com/konnenl/vet-clinic/internal/model"
 	"github.com/konnenl/vet-clinic/internal/repository"
 	_ "github.com/konnenl/vet-clinic/internal/validator"
@@ -60,7 +60,29 @@ func (h *visitHandler) createVisit(c echo.Context) error {
 }
 
 // visit.GET("/:visitID", h.visit.getByID)
-// visit.GET("/data", h.visit.createGet)
 // visit.GET("", h.visit.getAll)
+func (h *visitHandler) getAll(c echo.Context) error {
+	claims, err := auth.GetClaims(c)
+	if err != nil {
+		if httpErr, ok := err.(*echo.HTTPError); ok {
+			return httpErr
+		}
+		return echo.NewHTTPError(401, "Invalid authentication")
+	}
+
+	petsVisits, err := h.repo.GetAll(uint(claims.UserId))
+	if err != nil {
+		return c.JSON(500, echo.Map{
+			"error": "Internal error",
+		})
+	}
+
+	visitsResponce := newPetsVisitsResponce(petsVisits)
+
+	return c.JSON(http.StatusOK, echo.Map{
+		"visits": visitsResponce,
+	})
+}
+
 // func (h *visitHandler) getAllVisits(c echo.Context) error {
 // }

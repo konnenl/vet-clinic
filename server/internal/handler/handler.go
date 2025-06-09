@@ -51,8 +51,7 @@ func (h *Handler) InitRoutes(e *echo.Echo) {
 	visit.Use(h.AuthService.Middleware())
 	visit.POST("", h.visit.createVisit)
 	// visit.GET("/:visitID", h.visit.getByID)
-	// visit.GET("/data", h.visit.createGet)
-	// visit.GET("", h.visit.getAll)
+	visit.GET("", h.visit.getAll)
 
 	main := e.Group("main")
 	main.GET("/services", h.service.getAllServices)
