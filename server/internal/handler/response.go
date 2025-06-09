@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/konnenl/vet-clinic/internal/model"
+	"time"
 )
 
 type clientResponse struct {
@@ -124,4 +125,28 @@ func newTypeBreedResponse(t []*model.Type) []typeResponse {
 	}
 
 	return types
+}
+
+type petResponce struct {
+	ID   uint   `json:"id"`
+	Name string `json:"name"`
+}
+
+func newAllPetsResponce(p []model.Pet) []petResponce {
+	pets := make([]petResponce, len(p))
+	for i, pet := range p {
+		pets[i] = petResponce{
+			ID:   pet.ID,
+			Name: pet.Name,
+		}
+	}
+	return pets
+}
+
+type visitResponce struct {
+	ID       uint      `json:"id"`
+	DateTime time.Time `json:"datetime"`
+	Status   string    `json:"status"`
+	Type     string    `json:"type"`
+	Cost     float64   `json:"cost"`
 }

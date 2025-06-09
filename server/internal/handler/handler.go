@@ -12,6 +12,7 @@ type Handler struct {
 	auth        *authHandler
 	pet         *petHandler
 	service     *serviceHandler
+	visit       *visitHandler
 }
 
 func NewHandler(repository *repository.Repository, authService *auth.JWTService) *Handler {
@@ -21,10 +22,12 @@ func NewHandler(repository *repository.Repository, authService *auth.JWTService)
 		pet:         newPetHandler(repository.Pet),
 		auth:        newAuthHandler(repository.User, authService),
 		service:     newServiceHandler(repository.Service),
+		visit:       newVisitHandler(repository.Visit),
 	}
 }
 
 func (h *Handler) InitRoutes(e *echo.Echo) {
+	//TODO rename
 	e.GET("/test", func(c echo.Context) error {
 		return echo.NewHTTPError(200, "vet-clinic")
 	})
@@ -39,9 +42,17 @@ func (h *Handler) InitRoutes(e *echo.Echo) {
 	users.PUT("/user", h.user.updateUser)
 	users.DELETE("", h.user.deactivateUser)
 	users.POST("/pet", h.pet.createPetPost)
+	users.GET("/pet/all", h.pet.getAllPets)
 	users.GET("/pet", h.pet.createPetGet)
 	users.PUT("/pet/:petID", h.pet.updatePet)
 	users.DELETE("/pet/:petID", h.pet.deactivatePet)
+
+	visit := e.Group("/visits")
+	visit.Use(h.AuthService.Middleware())
+	visit.POST("", h.visit.createVisit)
+	// visit.GET("/:visitID", h.visit.getByID)
+	// visit.GET("/data", h.visit.createGet)
+	// visit.GET("", h.visit.getAll)
 
 	main := e.Group("main")
 	main.GET("/services", h.service.getAllServices)

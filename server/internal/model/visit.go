@@ -7,6 +7,7 @@ import (
 
 type Visit struct {
 	gorm.Model
+	PetID         uint
 	VisitDate     time.Time
 	Type          string
 	Status        string
@@ -16,9 +17,10 @@ type Visit struct {
 
 type VisitServices struct {
 	gorm.Model
-	Symptom           string
-	Diagnosis         string
-	Comment           string
-	EmployeeServiceID uint
-	VisitID           uint
+	Symptom   string
+	Diagnosis string
+	Comment   string
+	ServiceID uint
+	Service   Service `gorm:"foreignKey:ServiceID"`
+	VisitID   uint
 }

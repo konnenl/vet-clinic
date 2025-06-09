@@ -7,7 +7,7 @@ import (
 	_ "regexp"
 )
 
-//TODO role enum
+// TODO role enum
 type User struct {
 	gorm.Model
 	Email       string `gorm:"unique;not null"`

@@ -80,3 +80,16 @@ func (r *petRepository) CheckPetOwnership(petID uint, userID uint) (bool, error)
 
 	return count > 0, nil
 }
+
+func (r *petRepository) GetAllByUserID(id uint) ([]model.Pet, error) {
+	var client model.Client
+	err := r.db.
+		Preload("Pets", "is_active = ?", true).
+		Where("user_id = ?", id).
+		Find(&client).
+		Error
+	if err != nil {
+		return nil, err
+	}
+	return client.Pets, nil
+}
