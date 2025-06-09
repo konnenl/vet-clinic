@@ -61,9 +61,6 @@ a{
     text-decoration: none;
 }
 
-main{
-    padding: 34px 25px;
-}
 
 h1{
     font-size: var(--h1);

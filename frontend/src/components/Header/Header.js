@@ -1,24 +1,26 @@
 import React from 'react'
 import GreenButton from '../GreenButton/GreenButton'
 import OrangeButton from '../OrangeButton/OrangeButton'
+import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import './Header.css'
-import AuthModal from '../AuthModal/AuthModal'
 
 export default function Header() {
-  const [isModalOpen,setModal] = React.useState(false);
+  const navigate = useNavigate();
   return (
     <header>
-      <span className="logo">Dogtor</span>
+      <Link to="/">
+        <span className="logo">Dogtor</span>
+      </Link>
       <ul className="nav">
-        <li>ИСТОРИЯ</li>
-        <li>УСЛУГИ</li>
+        <Link >ИСТОРИЯ</Link>
+        <Link to='/catalogue'>УСЛУГИ</Link>
         <li>ВОПРОСЫ</li>
       </ul>
       <div className="button_area">
-        <OrangeButton text="ЗАПИСАТЬСЯ" />
-        <GreenButton text="ВОЙТИ" onClick={()=>setModal(true)}/>
+        <OrangeButton text="ЗАПИСАТЬСЯ" onClick={()=>navigate('/cart')}/>
+        <GreenButton text="ВОЙТИ" onClick={()=>navigate('/auth')}/>
       </div>
-      <AuthModal isOpen={isModalOpen} onClose={()=>setModal(false)} />
     </header>
   )
 }
