@@ -35,7 +35,7 @@ export default function Catalogue() {
 
   return (
     <main className="catalogue-main">
-      <div className="services-section">
+      <div className="catalogue">
         {services.map((service, index) => (
           <Link 
             to={`/services/${service.name.toLowerCase()}`} 

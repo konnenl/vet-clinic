@@ -61,9 +61,11 @@
 }
 
 .pets-list {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
+  
+  display: flex;
+  flex-direction: column;
+  gap:10px;
+  flex-wrap: wrap;
 }
 
 .no-pets-message {

@@ -280,3 +280,8 @@
         padding: 1.5rem;
     }
 }
+
+.pet-select option:focus {
+  background-color: var(--green-main); 
+
+}

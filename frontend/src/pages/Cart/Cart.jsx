@@ -1,33 +1,81 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import GreenButton from '../../components/GreenButton/GreenButton';
 import OrangeButton from '../../components/OrangeButton/OrangeButton';
 import './Cart.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function Cart() {
-  const [selectedPet, setSelectedPet] = useState('dog_1');
+  const [selectedPet, setSelectedPet] = useState(null);
   const [selectedService, setSelectedService] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
-  const [servicesList, setServicesList] = useState([
-    { id: 1, name: 'Гигиенический уход для йорков', price: 5000, date: '22.03.2025' },
-    { id: 2, name: 'Стрижка', price: 3000, date: '23.03.2025' }
-  ]);
-
-  const serviceOptions = [
-    { id: 1, name: 'Гигиенический уход для йорков', price: 5000 },
-    { id: 2, name: 'Стрижка', price: 3000 },
-    { id: 3, name: 'Мытье', price: 2000 },
-    { id: 4, name: 'Чистка зубов', price: 4000 },
-    { id: 5, name: 'Обрезание когтей', price: 3500 },
-    { id: 6, name: 'Комплексный уход', price: 6000 },
-    { id: 7, name: 'Тримминг', price: 4500 },
-    { id: 8, name: 'Уход за ушами', price: 1500 }
-  ];
+  const [servicesList, setServicesList] = useState([]);
+  const [serviceOptions, setServiceOptions] = useState([]);
+  const [pets, setPets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const filteredServices = serviceOptions.filter(service =>
     service.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  useEffect(() => {
+    fetchProfileAndServices();
+  }, []);
+
+  const fetchProfileAndServices = async () => {
+    try {
+      const token = localStorage.getItem('token');
+
+      const profileResponse = await fetch('http://localhost:8080/profile', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (!profileResponse.ok) {
+        throw new Error('Ошибка при загрузке профиля');
+      }
+      
+      const profileData = await profileResponse.json();
+      setPets(profileData.pets || []);
+      
+
+      if (profileData.pets && profileData.pets.length > 0) {
+        setSelectedPet(profileData.pets[0].id.toString());
+      }
+      
+      await fetchServices();
+      
+      setLoading(false);
+    } catch (error) {
+      console.error('Ошибка:', error);
+      setLoading(false);
+    }
+  };
+
+  const fetchServices = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/main/services');
+      if (!response.ok) {
+        throw new Error('Ошибка при загрузке услуг');
+      }
+      const data = await response.json();
+
+      const allServices = data.services.flatMap(category => 
+        category.services.map(service => ({
+          ...service,
+          category: category.name
+        }))
+      );
+      
+      setServiceOptions(allServices);
+    } catch (error) {
+      console.error('Ошибка:', error);
+    }
+  };
+
 
   const handleAddService = (e) => {
     e.preventDefault();
@@ -68,6 +116,55 @@ export default function Cart() {
     setShowDropdown(false);
   };
 
+  const handleCheckout = async () => {
+  if (servicesList.length === 0 || !selectedPet) {
+    alert('Пожалуйста, добавьте услуги и выберите питомца');
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem('token');
+  
+    const formattedDate = servicesList[0].date; 
+    const [day, month, year] = formattedDate.split('.');
+    const isoDate = new Date(`${year}-${month}-${day}T12:00:00Z`).toISOString();
+
+    const visitData = {
+      pet_id: parseInt(selectedPet),
+      datetime: isoDate,
+      type: "В клинике",
+      services: servicesList.map(service => {
+        const originalService = serviceOptions.find(s => s.name === service.name);
+        return { id: originalService ? originalService.id : service.id };
+      })
+    };
+
+    const response = await fetch('http://localhost:8080/visits', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(visitData)
+    });
+
+      if (!response.ok) {
+        throw new Error('Ошибка при оформлении заказа');
+      }
+
+      const result = await response.json();
+      console.log('Заказ успешно оформлен:', result);
+      alert('Заказ успешно оформлен!');
+    
+      setServicesList([]);
+      resetForm();
+      navigate('/history');
+    } catch (error) {
+      console.error('Ошибка при оформлении заказа:', error);
+      alert('Произошла ошибка при оформлении заказа: ' + error.message);
+    }
+  };
+
   const calculateTotal = () => {
     return servicesList.reduce((total, service) => total + service.price, 0);
   };
@@ -87,15 +184,22 @@ export default function Cart() {
       <div className="cart-card">
         <div className='pet-select-section'>
           <h3 className="section-title">Выберите питомца</h3>
-          <select 
-            className="pet-select"
-            value={selectedPet}
-            onChange={(e) => setSelectedPet(e.target.value)}
-          >
-            <option value="dog_1">Хатико</option>
-            <option value="dog_2">Кисегач</option>
-            <option value="dog_3">Рекс</option>
-          </select>
+          {pets.length > 0 ? (
+            <select 
+              className="pet-select"
+              value={selectedPet}
+              onChange={(e) => setSelectedPet(e.target.value)}
+            >
+              {pets.map(pet => (
+                
+                <option key={pet.id} value={pet.id}>
+                  {pet.name}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <p>У вас нет зарегистрированных питомцев</p>
+          )}
         </div>
         
         <div className="services-section">
@@ -158,7 +262,7 @@ export default function Cart() {
           </div>
           
           <div className="price-summary">
-            <h3 className="section-title">Ваш заказ</h3>
+            <h3 className="section-title">Услуги</h3>
             <div className="services-list">
               {servicesList.length > 0 ? (
                 servicesList.map((service) => (
@@ -192,6 +296,7 @@ export default function Cart() {
               text="Перейти к оформлению" 
               className="checkout-button"
               disabled={servicesList.length === 0}
+              onClick={handleCheckout} 
             />
           </div>
         </div>

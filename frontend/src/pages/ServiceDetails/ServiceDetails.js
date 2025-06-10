@@ -41,7 +41,7 @@ export default function ServiceDetails() {
 
   return (
     <div className="service-details">
-      <h2>{serviceName}</h2>
+      <h2>{serviceName[0].toUpperCase()+serviceName.slice(1)}</h2>
       <ul className="services-list">
         {services.map(service => (
           <li key={service.id} className="service-item">
