@@ -2,7 +2,6 @@ package handler
 
 import (
 	"github.com/labstack/echo/v4"
-	"net/http"
 	"strings"
 
 	"github.com/konnenl/vet-clinic/internal/auth"

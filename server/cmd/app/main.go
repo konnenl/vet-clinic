@@ -42,11 +42,12 @@ func main() {
 		AllowOrigins: []string{"http://localhost:3000"},
 		AllowMethods: []string{echo.GET, echo.POST, echo.PUT, echo.DELETE},
 		AllowHeaders: []string{echo.HeaderAuthorization, echo.HeaderContentType},
+		AllowCredentials: true,
 	}))
 	e.Validator = validator.New()
 
 	repos := repository.NewRepository(db)
-	authService := auth.New(cfg.JWTSecretKey, 15*60)
+	authService := auth.New(cfg.JWTSecretKey, 180*60)
 	handlers := handler.NewHandler(repos, authService)
 
 	port := ":" + cfg.ServerPort

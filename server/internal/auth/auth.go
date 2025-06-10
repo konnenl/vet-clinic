@@ -51,7 +51,6 @@ func (s *JWTService) Middleware() echo.MiddlewareFunc {
     ParseTokenFunc: func(c echo.Context, auth string) (interface{}, error) {
       parts := strings.Split(auth, " ")
       if len(parts) != 2 || parts[0] != "Bearer" {
-        fmt.Println(1)
         return nil, echo.NewHTTPError(401, "Invalid authorization header format")
       }
       token, err := jwt.ParseWithClaims(parts[1], &Claims{}, func(token *jwt.Token) (interface{}, error) {
@@ -64,7 +63,6 @@ func (s *JWTService) Middleware() echo.MiddlewareFunc {
       return token, nil
     },
     ErrorHandler: func(c echo.Context, err error) error {
-      fmt.Println(3)
       return c.JSON(401, echo.Map{
         "error": "Unauthorized",
       })
