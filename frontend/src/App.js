@@ -9,6 +9,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthContext, AuthProvider } from "./components/AuthContext";
 import { useContext } from 'react';
 import ProfilePage from "./pages/Profile/Profile";
+import AddPetPage from "./pages/AddPet/AddPet";
+import ServiceDetails from "./pages/ServiceDetails/ServiceDetails";
+import History from "./pages/History/History";
 
 // Компонент-обёртка для защищённых маршрутов
 const ProtectedRoute = ({ children }) => {
@@ -29,18 +32,21 @@ export default function App() {
           
           <Route path="/history" element={
             <ProtectedRoute>
-
+              <History />
             </ProtectedRoute>
           } />
           
           <Route path="/catalogue" element={<Catalogue />} />
+          <Route path="/services/:serviceName" element={<ServiceDetails />} />
           
           <Route path="/cart" element={
             <ProtectedRoute>
               <Cart />
             </ProtectedRoute>
           } />
-
+          <Route path="/add-pet" element={<ProtectedRoute>
+              <AddPetPage />
+            </ProtectedRoute>} />
           <Route path="/profile" element={
             <ProtectedRoute>
               <ProfilePage />

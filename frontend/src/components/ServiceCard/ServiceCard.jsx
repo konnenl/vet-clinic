@@ -10,9 +10,6 @@ export default function ServiceCard(props) {
             <p className="content__title">{props.title}</p>
             <p className="content__service-count">{props.count} услуг</p>
           </div>
-          <div className="content__image">
-            <img className="service-image" src={props.src} />
-          </div>
         </div>
       </div>
     </div>

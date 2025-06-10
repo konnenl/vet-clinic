@@ -12,18 +12,21 @@ export default function Header() {
 
   return (
     <header>
-      <Link to="/">
+      <Link to="/" className='logo-link'>
         <span className="logo">Dogtor</span>
       </Link>
       <ul className="nav">
-        <Link >ИСТОРИЯ</Link>
-        <Link to='/catalogue'>УСЛУГИ</Link>
-        <li>ВОПРОСЫ</li>
+        <li>
+          <Link to="/history" className="nav-link">ИСТОРИЯ</Link>
+        </li>
+        <li>
+          <Link to='/catalogue' className="nav-link">УСЛУГИ</Link>
+        </li>
       </ul>
       <div className="button_area">
         <OrangeButton text="ЗАПИСАТЬСЯ" onClick={()=>navigate('/cart')}/>
         {isAuth ? (
-          <Link to="/profile" className="profile-link">ПРОФИЛЬ</Link>
+          <Link to="/profile" className="profile-link nav-link">ПРОФИЛЬ</Link>
         ) : (
           <GreenButton text="ВОЙТИ" onClick={() => navigate('/auth')}/>
         )}
