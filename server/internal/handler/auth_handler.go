@@ -77,7 +77,7 @@ func (h *authHandler) signUp(c echo.Context) error {
 	}
 
 	return c.JSON(201, echo.Map{
-		"id": id,
+		"id":    id,
 		"token": token,
 	})
 }
@@ -110,7 +110,7 @@ func (h *authHandler) signIn(c echo.Context) error {
 		})
 	}
 	return c.JSON(200, echo.Map{
-		"id": user.ID,
+		"id":    user.ID,
 		"token": token,
 	})
 }

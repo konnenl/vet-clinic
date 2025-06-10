@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/konnenl/vet-clinic/internal/model"
+	"time"
 )
 
 type clientResponse struct {
@@ -124,4 +125,65 @@ func newTypeBreedResponse(t []*model.Type) []typeResponse {
 	}
 
 	return types
+}
+
+type petResponce struct {
+	ID   uint   `json:"id"`
+	Name string `json:"name"`
+}
+
+func newAllPetsResponce(p []model.Pet) []petResponce {
+	pets := make([]petResponce, len(p))
+	for i, pet := range p {
+		pets[i] = petResponce{
+			ID:   pet.ID,
+			Name: pet.Name,
+		}
+	}
+	return pets
+}
+
+type visitResponce struct {
+	ID       uint              `json:"visit_id"`
+	DateTime time.Time         `json:"datetime"`
+	Status   string            `json:"status"`
+	Type     string            `json:"type"`
+	Cost     float64           `json:"cost"`
+	Services []serviceResponse `json:"services"`
+}
+
+type petVisitResponce struct {
+	PetID  uint            `json:"pet_id"`
+	Name   string          `json:"name"`
+	Visits []visitResponce `json:"visits"`
+}
+
+func newPetsVisitsResponce(p []model.Pet) []petVisitResponce {
+	petsVisits := make([]petVisitResponce, len(p))
+	for i, pet := range p {
+		visits := make([]visitResponce, len(pet.Visits))
+		for j, visit := range pet.Visits {
+			services := make([]serviceResponse, len(visit.VisitServices))
+			for k, service := range visit.VisitServices {
+				services[k] = serviceResponse{
+					ID:    service.Service.ID,
+					Name:  service.Service.Name,
+					Price: service.Service.Price,
+				}
+			}
+			visits[j] = visitResponce{
+				ID:       visit.ID,
+				DateTime: visit.VisitDate,
+				Status:   visit.Status,
+				Cost:     visit.Cost,
+				Services: services,
+			}
+		}
+		petsVisits[i] = petVisitResponce{
+			PetID:  pet.ID,
+			Name:   pet.Name,
+			Visits: visits,
+		}
+	}
+	return petsVisits
 }

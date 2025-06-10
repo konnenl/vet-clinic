@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 	"net/http"
@@ -178,4 +179,28 @@ func (h *petHandler) deactivatePet(c echo.Context) error {
 	return c.JSON(http.StatusOK, echo.Map{
 		"message": "Pet deactivated successfully",
 	})
+}
+
+func (h *petHandler) getAllPets(c echo.Context) error {
+	claims, err := auth.GetClaims(c)
+	if err != nil {
+		if httpErr, ok := err.(*echo.HTTPError); ok {
+			return httpErr
+		}
+		return echo.NewHTTPError(401, "Invalid authentication")
+	}
+
+	pets, err := h.repo.GetAllByUserID(uint(claims.UserId))
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return c.JSON(404, echo.Map{
+				"error": "User not found",
+			})
+		}
+		return c.JSON(500, echo.Map{
+			"error": "Internal error",
+		})
+	}
+	u := newAllPetsResponce(pets)
+	return c.JSON(200, u)
 }
