@@ -1,7 +1,7 @@
 ## Интерфейс
 
 ### Главная страница
-![image](https://github.com/user-attachments/assets/4e3dfc55-5952-4572-a9ca-4d099b948080)
+![image](https://github.com/user-attachments/assets/15ce0f72-e050-407b-865d-0018858c12ca)
 ### Авторизация
 ![image](https://github.com/user-attachments/assets/3e1cd4d2-a628-4b27-852c-d1b2e7d78050)
 ### Регистрация
