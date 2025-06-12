@@ -3,7 +3,7 @@
 ### Главная страница
 ![image](https://github.com/user-attachments/assets/4e3dfc55-5952-4572-a9ca-4d099b948080)
 ### Авторизация
-![image](https://github.com/user-attachments/assets/b3634cc8-eed9-47a1-af91-617536d7fb0a)
+![image](https://github.com/user-attachments/assets/3e1cd4d2-a628-4b27-852c-d1b2e7d78050)
 ### Регистрация
 ![image](https://github.com/user-attachments/assets/74c44389-579d-480f-904a-ad8c2e5f2049)
 ###  Профиль пользователя
