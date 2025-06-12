@@ -27,6 +27,9 @@ func (cv *CustomValidator) Validate(i interface{}) error {
 
 func validatePhoneNumber(field validator.FieldLevel) bool {
 	phoneNumber := field.Field().String()
+	if phoneNumber == ""{
+		return true
+	}
 	match, _ := regexp.MatchString(`^(\+7|8)\d{10}$`, phoneNumber)
 	return match
 }

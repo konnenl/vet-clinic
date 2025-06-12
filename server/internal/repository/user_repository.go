@@ -47,7 +47,8 @@ func (r *userRepository) Authenticate(email string, password string) (*model.Use
 
 func (r *userRepository) GetByID(id uint) (*model.Client, error) {
 	var client model.Client
-	if err := r.db.Preload("User").Preload("Pets", "is_active = ?", true).Where("user_id = ?", id).First(&client).Error; err != nil {
+	if err := r.db.Preload("User").Preload("Pets", "is_active = ?", true).Preload("Pets.Breed").
+        Preload("Pets.Breed.Type").Where("user_id = ?", id).First(&client).Error; err != nil {
 		return nil, err
 	}
 	return &client, nil
@@ -71,10 +72,21 @@ func (r *userRepository) Update(user *model.User, client *model.Client) error {
 				return err
 			}
 		}
+		var dbUser model.User
+        if err := tx.First(&dbUser, user.ID).Error; err != nil {
+            return err
+        }
+
+		user.Password = dbUser.Password
 		if err := tx.Save(user).Error; err != nil {
 			return err
 		}
 		if client != nil {
+			var dbClient model.Client
+            if err := tx.Where("user_id = ?", user.ID).First(&dbClient).Error; err != nil {
+                return err
+            }
+            client.ID = dbClient.ID
 			if err := tx.Save(client).Error; err != nil {
 				return err
 			}

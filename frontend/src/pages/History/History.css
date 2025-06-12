@@ -1,0 +1,99 @@
+.history-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.loading, .error, .no-visits {
+    text-align: center;
+    padding: 20px;
+    font-size: 1.2rem;
+}
+
+.error {
+    color: #ff3333;
+}
+
+.pet-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.pet-name {
+    color: #333;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.visits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.visit-card {
+    background: #f9f9f9;
+    border-radius: 6px;
+    padding: 15px;
+    border-left: 4px solid #4CAF50;
+}
+
+.visit-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.visit-date {
+    font-weight: 500;
+    color: #555;
+}
+
+.visit-status {
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.visit-status.запланировано {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.visit-status.завершено {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.visit-status.отменено {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.visit-services h4 {
+    margin: 10px 0 5px 0;
+    font-size: 1rem;
+}
+
+.visit-services ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.visit-services li {
+    padding: 5px 0;
+    border-bottom: 1px dashed #ddd;
+}
+
+.visit-total {
+    margin-top: 10px;
+    font-weight: 600;
+    text-align: right;
+    color: #333;
+}

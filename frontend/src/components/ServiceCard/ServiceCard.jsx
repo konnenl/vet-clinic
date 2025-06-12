@@ -1,15 +1,17 @@
 import React from 'react';
 import './ServiceCard.css';
-import GreenButton from '../GreenButton/GreenButton';
+
 export default function ServiceCard(props) {
   return (
-    <div className="service-card">
-        <div className="service-card__photo">
-            <img src="props" alt="продукт" />
+    <div className="service-card__wrapper">
+      <div className="service-card">
+        <div className="service-card__content">
+          <div className="content__text">
+            <p className="content__title">{props.title}</p>
+            <p className="content__service-count">{props.count} услуг</p>
+          </div>
         </div>
-        <h5>{props.name}</h5>
-        <p>{props.description}</p>  
-        <GreenButton text='Подрбнее'/>
+      </div>
     </div>
-  )
+  );
 }

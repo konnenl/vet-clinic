@@ -40,36 +40,35 @@ func (s *JWTService) GenerateToken(userId uint, role string) (string, error) {
 }
 
 func (s *JWTService) Middleware() echo.MiddlewareFunc {
-	return echojwt.WithConfig(echojwt.Config{
-		SigningKey:    s.SecretKey,
-		SigningMethod: "HS256",
-		TokenLookup:   "header:Authorization",
-		ContextKey:    "user",
-		NewClaimsFunc: func(c echo.Context) jwt.Claims {
-			return &Claims{}
-		},
-		ParseTokenFunc: func(c echo.Context, auth string) (interface{}, error) {
-			parts := strings.Split(auth, " ")
-			if len(parts) != 2 || parts[0] != "Bearer" {
-				return nil, echo.NewHTTPError(401, "Invalid authorization header format")
-			}
-			token, err := jwt.ParseWithClaims(parts[1], &Claims{}, func(token *jwt.Token) (interface{}, error) {
-				return s.SecretKey, nil
-			})
-			if err != nil {
-				return nil, echo.NewHTTPError(401, "Invalid token")
-			}
-
-			return token, nil
-		},
-		ErrorHandler: func(c echo.Context, err error) error {
-			return c.JSON(401, echo.Map{
-				"error": "Unauthorized",
-			})
-		},
-	})
+  return echojwt.WithConfig(echojwt.Config{
+    SigningKey:    s.SecretKey,
+    SigningMethod: "HS256",
+    TokenLookup:   "header:Authorization",
+    ContextKey:    "user",
+    NewClaimsFunc: func(c echo.Context) jwt.Claims {
+      return &Claims{}
+    },
+    ParseTokenFunc: func(c echo.Context, auth string) (interface{}, error) {
+      parts := strings.Split(auth, " ")
+      if len(parts) != 2 || parts[0] != "Bearer" {
+        return nil, echo.NewHTTPError(401, "Invalid authorization header format")
+      }
+      token, err := jwt.ParseWithClaims(parts[1], &Claims{}, func(token *jwt.Token) (interface{}, error) {
+        return s.SecretKey, nil
+      })
+      if err != nil {
+        return nil, echo.NewHTTPError(401, "Invalid token")
+      }
+      
+      return token, nil
+    },
+    ErrorHandler: func(c echo.Context, err error) error {
+      return c.JSON(401, echo.Map{
+        "error": "Unauthorized",
+      })
+    },
+  })
 }
-
 func GetClaims(c echo.Context) (*Claims, error) {
 	token, ok := c.Get("user").(*jwt.Token)
 	if !ok {

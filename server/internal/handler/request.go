@@ -17,7 +17,7 @@ type userUpdateRequest struct {
 	Patronymic  string `json:"patronymic"`
 	Email       string `json:"email" validate:"required,email"`
 	PhoneNumber string `json:"phone_number" validate:"required,phone"`
-	Address     string `json"address"`
+	Address     string `json:"address"`
 }
 
 type userLoginRequest struct {

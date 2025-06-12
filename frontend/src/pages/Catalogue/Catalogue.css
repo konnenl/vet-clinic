@@ -1,0 +1,12 @@
+
+.catalogue {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 колонки равной ширины */
+  gap: 20px; /* расстояние между карточками */
+  padding: 20px;
+}
+
+.service-link {
+  text-decoration: none; /* убираем подчеркивание ссылок */
+  color: inherit; /* наследуем цвет текста */
+}
