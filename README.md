@@ -2,15 +2,26 @@
 
 ### Главная страница
 ![image](https://github.com/user-attachments/assets/4e3dfc55-5952-4572-a9ca-4d099b948080)
-
+### Авторизация
+![image](https://github.com/user-attachments/assets/b3634cc8-eed9-47a1-af91-617536d7fb0a)
+### Регистрация
+![image](https://github.com/user-attachments/assets/74c44389-579d-480f-904a-ad8c2e5f2049)
 ###  Профиль пользователя
-
+![image](https://github.com/user-attachments/assets/66b309b6-3e95-47ab-a323-cf0fd6ba7ebe)
+### Редактирование профиля пользователя
+![image](https://github.com/user-attachments/assets/cbe90c32-ba4d-4254-9471-1ea63155a80c)
+### Питомцы
+![image](https://github.com/user-attachments/assets/3a3c0f3b-c19d-4489-a33d-c71a9dbd948a)
 ### Добавление питомца
-
+![image](https://github.com/user-attachments/assets/8f84f208-9549-4ca4-b6ee-60a0a7df14ae)
 ### Запись на приём
-
+![image](https://github.com/user-attachments/assets/4180bdd9-1660-4b99-b0d8-0a2ab04e04db)
 ### История посещений
- и тд
+![image](https://github.com/user-attachments/assets/746a999c-8e52-45d5-b6ea-1bf1d68812ba)
+### Услуги
+![image](https://github.com/user-attachments/assets/1cc763b1-bb28-4cf2-8373-1b55d872ea22)
+![image](https://github.com/user-attachments/assets/67a3855a-89ba-4236-be5f-9ba48b6f2523)
+
 
 
 
