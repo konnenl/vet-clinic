@@ -18,9 +18,6 @@
 ![image](https://github.com/user-attachments/assets/4180bdd9-1660-4b99-b0d8-0a2ab04e04db)
 ### История посещений
 ![image](https://github.com/user-attachments/assets/746a999c-8e52-45d5-b6ea-1bf1d68812ba)
-### Услуги
-![image](https://github.com/user-attachments/assets/1cc763b1-bb28-4cf2-8373-1b55d872ea22)
-![image](https://github.com/user-attachments/assets/67a3855a-89ba-4236-be5f-9ba48b6f2523)
 
 
 
